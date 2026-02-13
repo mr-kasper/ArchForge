@@ -16,9 +16,21 @@ export type ArchitectureStyle =
   | 'microservices'
   | 'modular-monolith';
 
-export type DatabaseOption = 'postgresql' | 'mysql' | 'none';
-export type AuthOption = 'jwt' | 'oauth' | 'none';
-export type ToolingOption = 'docker' | 'ci' | 'tests';
+export type DatabaseOption = 'postgresql' | 'mysql' | 'mongodb' | 'sqlite' | 'none';
+export type AuthOption = 'jwt' | 'oauth' | 'session' | 'none';
+export type ToolingOption = 'docker' | 'ci' | 'tests' | 'linting' | 'husky';
+export type PackageManager = 'npm' | 'yarn' | 'pnpm' | 'gradle' | 'dotnet';
+export type ApiStyle = 'rest' | 'graphql' | 'grpc' | 'none';
+export type CSSFramework = 'tailwind' | 'css-modules' | 'styled-components' | 'sass' | 'none';
+export type StateManagement = 'zustand' | 'redux' | 'jotai' | 'context' | 'none';
+export type ORMChoice = 'prisma' | 'typeorm' | 'hibernate' | 'ef-core' | 'none';
+export type LoggingFramework = 'slf4j' | 'serilog' | 'winston' | 'none';
+export type ValidationLibrary =
+  | 'zod'
+  | 'class-validator'
+  | 'bean-validation'
+  | 'fluent-validation'
+  | 'none';
 
 export interface ProjectConfig {
   projectName: string;
@@ -28,6 +40,22 @@ export interface ProjectConfig {
   auth: AuthOption;
   tooling: ToolingOption[];
   outputDir: string;
+  /** Package manager to use */
+  packageManager: PackageManager;
+  /** API style (REST, GraphQL, gRPC) — backend only */
+  apiStyle: ApiStyle;
+  /** CSS framework — React only */
+  cssFramework: CSSFramework;
+  /** State management — React only */
+  stateManagement: StateManagement;
+  /** ORM / data access library */
+  orm: ORMChoice;
+  /** Logging framework — backend only */
+  logging: LoggingFramework;
+  /** Validation library */
+  validation: ValidationLibrary;
+  /** Server port */
+  port: number;
 }
 
 export interface TemplateFile {

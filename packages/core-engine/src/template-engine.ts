@@ -14,6 +14,14 @@ export interface RenderContext {
   database: string;
   auth: string;
   tooling: string[];
+  packageManager: string;
+  apiStyle: string;
+  cssFramework: string;
+  stateManagement: string;
+  orm: string;
+  logging: string;
+  validation: string;
+  port: number;
   year: number;
   [key: string]: unknown;
 }
@@ -26,6 +34,14 @@ function buildContext(config: ProjectConfig): RenderContext {
     database: config.database,
     auth: config.auth,
     tooling: config.tooling,
+    packageManager: config.packageManager || 'npm',
+    apiStyle: config.apiStyle || 'rest',
+    cssFramework: config.cssFramework || 'none',
+    stateManagement: config.stateManagement || 'none',
+    orm: config.orm || 'none',
+    logging: config.logging || 'none',
+    validation: config.validation || 'none',
+    port: config.port || 8080,
     year: new Date().getFullYear(),
   };
 }

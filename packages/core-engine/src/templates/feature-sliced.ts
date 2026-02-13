@@ -19,22 +19,33 @@ export const reactFeatureSlicedManifest: TemplateManifest = {
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "lint": "eslint . --ext .ts,.tsx"
+    "lint": "eslint src"
   },
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.21.0"
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^7.13.0"<% if (stateManagement === 'zustand') { %>,
+    "zustand": "^5.0.0"<% } %><% if (stateManagement === 'redux') { %>,
+    "@reduxjs/toolkit": "^2.11.0",
+    "react-redux": "^9.2.0"<% } %><% if (stateManagement === 'jotai') { %>,
+    "jotai": "^2.17.0"<% } %><% if (cssFramework === 'styled-components') { %>,
+    "styled-components": "^6.3.0"<% } %><% if (validation === 'zod') { %>,
+    "zod": "^4.3.0"<% } %>
   },
   "devDependencies": {
-    "@types/react": "^18.2.47",
-    "@types/react-dom": "^18.2.18",
-    "@vitejs/plugin-react": "^4.2.1",
-    "typescript": "^5.3.3",
-    "vite": "^5.0.11",
-    "eslint": "^8.56.0"
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^5.1.0",
+    "typescript": "^5.9.0",
+    "vite": "^7.3.0",
+    "eslint": "^9.21.0",
+    "@eslint/js": "^9.21.0",
+    "typescript-eslint": "^8.55.0"<% if (cssFramework === 'tailwind') { %>,
+    "tailwindcss": "^4.1.0",
+    "@tailwindcss/vite": "^4.1.0"<% } %><% if (cssFramework === 'sass') { %>,
+    "sass": "^1.97.0"<% } %>
   }
 }
 `,
@@ -69,10 +80,14 @@ export const reactFeatureSlicedManifest: TemplateManifest = {
       path: 'vite.config.ts',
       content: `import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import path from 'path';
+<% if (cssFramework === 'tailwind') { %>import tailwindcss from '@tailwindcss/vite';
+<% } %>import path from 'path';
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+<% if (cssFramework === 'tailwind') { %>    tailwindcss(),
+<% } %>  ],
   resolve: {
     alias: {
       '@app': path.resolve(__dirname, 'src/app'),
@@ -85,6 +100,26 @@ export default defineConfig({
     },
   },
 });
+`,
+    },
+    {
+      path: 'eslint.config.js',
+      content: `import eslint from '@eslint/js';
+import tseslint from 'typescript-eslint';
+
+export default tseslint.config(
+  eslint.configs.recommended,
+  ...tseslint.configs.recommended,
+  {
+    rules: {
+      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/explicit-function-return-type': 'off',
+    },
+  },
+  {
+    ignores: ['dist/**'],
+  },
+);
 `,
     },
     {
@@ -102,8 +137,10 @@ export default defineConfig({
       content: `import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { App } from './App';
-import './styles/global.css';
-
+<% if (cssFramework === 'tailwind') { %>import '../index.css';
+<% } else if (cssFramework === 'sass') { %>import '../styles/global.scss';
+<% } else { %>import './styles/global.css';
+<% } %>
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode><App /></React.StrictMode>
 );
