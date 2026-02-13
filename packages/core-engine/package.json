@@ -1,6 +1,6 @@
 {
   "name": "@archforge/core-engine",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Core engine for ArchForge — template rendering, architecture rules, and project generation",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
