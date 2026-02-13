@@ -23,8 +23,19 @@
     "scaffolding",
     "clean-architecture",
     "monorepo",
-    "developer-tools"
+    "developer-tools",
+    "react",
+    "java",
+    "dotnet",
+    "vite",
+    "spring-boot",
+    "aspnet"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mr-kasper/archforge.git"
+  },
+  "homepage": "https://github.com/mr-kasper/archforge#readme",
   "author": "",
   "license": "MIT",
   "devDependencies": {

@@ -1,0 +1,27 @@
+# Source files
+packages/*/src/
+packages/*/tsconfig.json
+
+# Test
+packages/*/__tests__/
+*.test.ts
+*.spec.ts
+
+# Dev config
+.eslintrc*
+.prettierrc
+.husky/
+.vscode/
+
+# Test output
+test-output*/
+coverage/
+
+# Docs (available on GitHub)
+docs/
+examples/
+
+# Misc
+*.tgz
+.DS_Store
+Thumbs.db
