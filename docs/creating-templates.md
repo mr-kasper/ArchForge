@@ -2,6 +2,12 @@
 
 ArchForge uses an **EJS-based template engine** with a **registry pattern** to map `(stack, architecture)` combinations to template manifests.
 
+> **Install:** `npm install -g @archforge/cli` or use `npx @archforge/cli init`
+>
+> **npm:** [@archforge/cli](https://www.npmjs.com/package/@archforge/cli) · [@archforge/core-engine](https://www.npmjs.com/package/@archforge/core-engine)
+>
+> **Source:** [github.com/mr-kasper/archforge](https://github.com/mr-kasper/archforge)
+
 ## Template Structure
 
 Each template is defined as a `TemplateManifest`:
@@ -144,3 +150,7 @@ To add a new stack (e.g., Go, Python), you need to:
 6. Update the CLI prompts in `project-prompts.ts`
 
 This modular design makes it straightforward to extend ArchForge to support any technology stack.
+
+---
+
+> **Contribute:** [github.com/mr-kasper/archforge](https://github.com/mr-kasper/archforge) — PRs welcome!

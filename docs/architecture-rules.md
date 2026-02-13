@@ -2,6 +2,12 @@
 
 ArchForge enforces architectural boundaries at the structural level. These rules are **not just lint suggestions** — they encode real dependency constraints that prevent architecture erosion over time.
 
+> **Install:** `npm install -g @archforge/cli` or use `npx @archforge/cli init`
+>
+> **npm:** [@archforge/cli](https://www.npmjs.com/package/@archforge/cli) · [@archforge/core-engine](https://www.npmjs.com/package/@archforge/core-engine)
+>
+> **Source:** [github.com/mr-kasper/archforge](https://github.com/mr-kasper/archforge)
+
 ## Built-in Rules (9 total)
 
 ### `clean/domain-isolation`
@@ -220,3 +226,7 @@ interface ArchitectureRule {
 ```
 
 See [Creating Templates](./creating-templates.md) for plugin development details.
+
+---
+
+> **Contribute:** [github.com/mr-kasper/archforge](https://github.com/mr-kasper/archforge) — PRs welcome!

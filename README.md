@@ -4,8 +4,9 @@
 
 ### Universal Architecture Generator
 
+[![npm](https://img.shields.io/npm/v/@archforge/cli?color=cb3837&logo=npm)](https://www.npmjs.com/package/@archforge/cli)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue?logo=typescript)](https://www.typescriptlang.org/)
-[![Node.js](https://img.shields.io/badge/Node.js-20+-green?logo=node.js)](https://nodejs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-18+-green?logo=node.js)](https://nodejs.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
@@ -120,25 +121,34 @@ archforge/
 ### Installation
 
 ```bash
-# Clone the repository
+# Install globally from npm
+npm install -g @archforge/cli
+
+# Or run directly with npx (no install needed)
+npx @archforge/cli init
+```
+
+<details>
+<summary>Install from source</summary>
+
+```bash
 git clone https://github.com/mr-kasper/archforge.git
 cd archforge
-
-# Install dependencies
 npm install
-
-# Build all packages
 npm run build
-
-# Link the CLI globally (optional)
 npm link -w packages/cli
 ```
+
+</details>
 
 ### Usage
 
 ```bash
 # Interactive mode — context-aware guided prompts
 archforge init
+
+# Or run via npx without installing
+npx @archforge/cli init
 
 # Quick mode — pass flags directly
 archforge init --name my-api --stack java --architecture clean --database postgresql --auth jwt
@@ -349,7 +359,15 @@ src/
 - [x] Package manager selection, port config, confirmation step
 - [x] All dependencies updated to latest: React 19, Vite 7, TypeScript 5.9, ESLint 9 (flat config)
 
-### Phase 4 — Next
+### Phase 4 — Published on npm ✅
+
+- [x] npm package publishing (`@archforge/core-engine`, `@archforge/cli`)
+- [x] `npx @archforge/cli init` — zero-install usage
+- [x] `npm install -g @archforge/cli` — global install
+- [x] `prepublishOnly` auto-build, `files` field (ships only `dist/`)
+- [x] `engines`, `keywords`, `repository`, `homepage` metadata
+
+### Phase 5 — Next
 
 - [ ] Versioned templates (`archforge init --template react@1.2`)
 - [ ] Custom template authoring guide + CLI
@@ -357,7 +375,7 @@ src/
 - [ ] VS Code extension for inline rule violations
 - [ ] Additional stacks: Go, Python (FastAPI), Rust
 
-### Phase 5 — Enterprise
+### Phase 6 — Enterprise
 
 - [ ] Team-shared configuration profiles
 - [ ] Remote template registries
@@ -381,6 +399,15 @@ This project demonstrates skills that **platform engineering**, **tech lead**, a
 
 ---
 
+## � npm Packages
+
+| Package                                                                          | Description                                          | Install                        |
+| -------------------------------------------------------------------------------- | ---------------------------------------------------- | ------------------------------ |
+| [`@archforge/cli`](https://www.npmjs.com/package/@archforge/cli)                 | Interactive CLI, prompts, commands                   | `npm i -g @archforge/cli`      |
+| [`@archforge/core-engine`](https://www.npmjs.com/package/@archforge/core-engine) | Template rendering, rules engine, project generation | `npm i @archforge/core-engine` |
+
+---
+
 ## 🛠️ Development
 
 ```bash
@@ -400,15 +427,8 @@ npm test
 npm run clean
 ```
 
-### Project Structure
-
-| Package                  | Purpose                                              |
-| ------------------------ | ---------------------------------------------------- |
-| `@archforge/core-engine` | Template rendering, rules engine, project generation |
-| `@archforge/cli`         | Interactive CLI, prompts, commands                   |
-
 ---
 
 ## 📄 License
 
-MIT © ArchForge Contributors
+MIT © [mr-kasper](https://github.com/mr-kasper)
