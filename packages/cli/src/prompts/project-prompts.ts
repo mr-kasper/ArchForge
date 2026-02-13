@@ -57,7 +57,9 @@ export async function collectProjectConfig(
       when: () => !overrides.architecture,
       choices: (answers: Record<string, string>) => {
         const stack = overrides.stack || answers.stack;
-        const choices = [
+
+        // Base architectures available for all stacks
+        const choices: Array<{ name: string; value: string }> = [
           {
             name: '🏛️  Clean Architecture (Domain → Application → Infrastructure → Presentation)',
             value: 'clean',
@@ -67,12 +69,47 @@ export async function collectProjectConfig(
             value: 'layered',
           },
         ];
+
+        // React-only architectures
         if (stack === 'react') {
           choices.push({
             name: '📦 Feature-based (self-contained feature modules)',
             value: 'feature-based',
           });
+          choices.push({
+            name: '🍰 Feature-Sliced Design (app/pages/features/entities/shared layers)',
+            value: 'feature-sliced',
+          });
         }
+
+        // Backend-only architectures (Java + .NET)
+        if (stack === 'java' || stack === 'dotnet') {
+          choices.push({
+            name: '🔷 Hexagonal / Ports & Adapters (Domain ↔ Ports ↔ Adapters)',
+            value: 'hexagonal',
+          });
+          choices.push({
+            name: '🧩 Domain-Driven Design (Aggregates, Entities, Value Objects, Events)',
+            value: 'ddd',
+          });
+          choices.push({
+            name: '🎯 MVC (Model-View-Controller with REST API + server views)',
+            value: 'mvc',
+          });
+          choices.push({
+            name: '⚡ CQRS (Command/Query Responsibility Segregation)',
+            value: 'cqrs',
+          });
+          choices.push({
+            name: '🌐 Microservices (API Gateway + independent services + Docker Compose)',
+            value: 'microservices',
+          });
+          choices.push({
+            name: '🧱 Modular Monolith (isolated modules with public APIs & event bus)',
+            value: 'modular-monolith',
+          });
+        }
+
         return choices;
       },
     },

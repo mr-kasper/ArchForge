@@ -15,3 +15,8 @@ export {
   BUILT_IN_RULES,
 } from './rules-engine';
 export { loadPlugin, PLUGIN_PREFIX } from './plugin-loader';
+export {
+  getArchitectureDefinition,
+  listArchitectureDefinitions,
+  getArchitecturesForStack,
+} from './architecture-definitions';

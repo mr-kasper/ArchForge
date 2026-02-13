@@ -26,7 +26,10 @@ program
   .description('Generate a new project with standardized architecture')
   .option('-n, --name <name>', 'Project name')
   .option('-s, --stack <stack>', 'Technology stack (react | java | dotnet)')
-  .option('-a, --architecture <arch>', 'Architecture style (clean | layered | feature-based)')
+  .option(
+    '-a, --architecture <arch>',
+    'Architecture style (clean | layered | feature-based | hexagonal | ddd | feature-sliced | mvc | cqrs | microservices | modular-monolith)',
+  )
   .option('-d, --database <db>', 'Database (postgresql | mysql | none)')
   .option('--auth <auth>', 'Authentication (jwt | oauth | none)')
   .option('-o, --output <dir>', 'Output directory')
@@ -40,7 +43,7 @@ program
   .option('-d, --dir <dir>', 'Project directory to validate', '.')
   .option(
     '-a, --architecture <arch>',
-    'Architecture style (clean | layered | feature-based)',
+    'Architecture style (clean | layered | feature-based | hexagonal | ddd | feature-sliced | mvc | cqrs | microservices | modular-monolith)',
     'clean',
   )
   .action(lintArchitectureCommand);

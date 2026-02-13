@@ -114,6 +114,171 @@ const namingConventionRule: ArchitectureRule = {
   },
 };
 
+// ── Hexagonal Architecture rules ────────────────────────
+
+/**
+ * Ports (domain interfaces) must not import from adapters.
+ */
+const hexagonalPortIsolationRule: ArchitectureRule = {
+  id: 'hexagonal/port-isolation',
+  description: 'Ports (domain) cannot import from adapters (infrastructure)',
+  appliesTo: '**/ports/**/*.{ts,java,cs}',
+  validate(filePath: string, imports: string[]): RuleViolation[] {
+    const violations: RuleViolation[] = [];
+    for (const imp of imports) {
+      if (imp.includes('adapter') || imp.includes('infrastructure')) {
+        violations.push({
+          ruleId: 'hexagonal/port-isolation',
+          file: filePath,
+          message: `Port imports from adapter/infrastructure: ${imp}`,
+          severity: 'error',
+        });
+      }
+    }
+    return violations;
+  },
+};
+
+// ── DDD rules ───────────────────────────────────────────
+
+/**
+ * Aggregates should not import from infrastructure or presentation layers.
+ */
+const dddAggregateIsolationRule: ArchitectureRule = {
+  id: 'ddd/aggregate-isolation',
+  description: 'Domain aggregates must not depend on infrastructure or presentation',
+  appliesTo: '**/domain/**/*.{ts,java,cs}',
+  validate(filePath: string, imports: string[]): RuleViolation[] {
+    const violations: RuleViolation[] = [];
+    const forbidden = ['infrastructure', 'persistence', 'presentation', 'controller', 'api'];
+    for (const imp of imports) {
+      for (const layer of forbidden) {
+        if (imp.toLowerCase().includes(layer)) {
+          violations.push({
+            ruleId: 'ddd/aggregate-isolation',
+            file: filePath,
+            message: `Domain imports from forbidden layer "${layer}": ${imp}`,
+            severity: 'error',
+          });
+        }
+      }
+    }
+    return violations;
+  },
+};
+
+// ── FSD rules ───────────────────────────────────────────
+
+/**
+ * Feature-Sliced Design: lower layers cannot import from upper layers.
+ * Layer order: shared < entities < features < widgets < pages < processes < app
+ */
+const fsdLayerOrderRule: ArchitectureRule = {
+  id: 'fsd/layer-order',
+  description: 'Lower FSD layers cannot import from upper layers',
+  appliesTo: 'src/**/*.{ts,tsx}',
+  validate(filePath: string, imports: string[]): RuleViolation[] {
+    const violations: RuleViolation[] = [];
+    const layers = ['shared', 'entities', 'features', 'widgets', 'pages', 'processes', 'app'];
+    const normPath = filePath.replace(/\\/g, '/');
+    const currentLayer = layers.find((l) => normPath.includes(`/${l}/`));
+    if (!currentLayer) return violations;
+    const currentIdx = layers.indexOf(currentLayer);
+
+    for (const imp of imports) {
+      const impNorm = imp.replace(/\\/g, '/');
+      for (let i = currentIdx + 1; i < layers.length; i++) {
+        if (impNorm.includes(`@${layers[i]}`) || impNorm.includes(`/${layers[i]}/`)) {
+          violations.push({
+            ruleId: 'fsd/layer-order',
+            file: filePath,
+            message: `Layer "${currentLayer}" imports from upper layer "${layers[i]}": ${imp}`,
+            severity: 'error',
+          });
+        }
+      }
+    }
+    return violations;
+  },
+};
+
+// ── CQRS rules ──────────────────────────────────────────
+
+/**
+ * Command handlers must not import from query/readmodel; query handlers must not import from writemodel.
+ */
+const cqrsSegregationRule: ArchitectureRule = {
+  id: 'cqrs/segregation',
+  description: 'Command side must not import from query/read side and vice-versa',
+  appliesTo: '**/{command,query}/**/*.{ts,java,cs}',
+  validate(filePath: string, imports: string[]): RuleViolation[] {
+    const violations: RuleViolation[] = [];
+    const normPath = filePath.replace(/\\/g, '/').toLowerCase();
+    const isCommand = normPath.includes('/command');
+    const isQuery = normPath.includes('/query');
+
+    for (const imp of imports) {
+      const impLower = imp.toLowerCase();
+      if (isCommand && (impLower.includes('readmodel') || impLower.includes('query'))) {
+        violations.push({
+          ruleId: 'cqrs/segregation',
+          file: filePath,
+          message: `Command side imports from query/read side: ${imp}`,
+          severity: 'error',
+        });
+      }
+      if (isQuery && (impLower.includes('writemodel') || impLower.includes('command'))) {
+        violations.push({
+          ruleId: 'cqrs/segregation',
+          file: filePath,
+          message: `Query side imports from command/write side: ${imp}`,
+          severity: 'error',
+        });
+      }
+    }
+    return violations;
+  },
+};
+
+// ── Modular Monolith rules ──────────────────────────────
+
+/**
+ * Modules must only interact via their public API interfaces, not internal classes.
+ */
+const moduleIsolationRule: ArchitectureRule = {
+  id: 'modular/module-isolation',
+  description: 'Modules can only import from other modules via their public api package',
+  appliesTo: '**/modules/**/*.{ts,java,cs}',
+  validate(filePath: string, imports: string[]): RuleViolation[] {
+    const violations: RuleViolation[] = [];
+    const normPath = filePath.replace(/\\/g, '/');
+    const match = normPath.match(/modules\/([^/]+)\//);
+    if (!match) return violations;
+    const currentModule = match[1];
+
+    for (const imp of imports) {
+      const impNorm = imp.replace(/\\/g, '/');
+      const moduleMatch = impNorm.match(/modules\/([^/]+)/);
+      if (moduleMatch && moduleMatch[1] !== currentModule) {
+        // Cross-module import: must go through api/
+        if (
+          !impNorm.includes('/api/') &&
+          !impNorm.includes('.api.') &&
+          !impNorm.includes('/events/')
+        ) {
+          violations.push({
+            ruleId: 'modular/module-isolation',
+            file: filePath,
+            message: `Module "${currentModule}" imports internal code from module "${moduleMatch[1]}". Use the public API instead.`,
+            severity: 'error',
+          });
+        }
+      }
+    }
+    return violations;
+  },
+};
+
 // ── Rule registry ────────────────────────────────────────
 
 const BUILT_IN_RULES: ArchitectureRule[] = [
@@ -121,6 +286,11 @@ const BUILT_IN_RULES: ArchitectureRule[] = [
   applicationIsolationRule,
   featureIsolationRule,
   namingConventionRule,
+  hexagonalPortIsolationRule,
+  dddAggregateIsolationRule,
+  fsdLayerOrderRule,
+  cqrsSegregationRule,
+  moduleIsolationRule,
 ];
 
 /**
@@ -141,6 +311,27 @@ export function getRulesForArchitecture(
       break;
     case 'layered':
       rules.push(namingConventionRule);
+      break;
+    case 'hexagonal':
+      rules.push(hexagonalPortIsolationRule, domainIsolationRule, namingConventionRule);
+      break;
+    case 'ddd':
+      rules.push(dddAggregateIsolationRule, domainIsolationRule, namingConventionRule);
+      break;
+    case 'feature-sliced':
+      rules.push(fsdLayerOrderRule, featureIsolationRule);
+      break;
+    case 'mvc':
+      rules.push(namingConventionRule);
+      break;
+    case 'cqrs':
+      rules.push(cqrsSegregationRule, namingConventionRule);
+      break;
+    case 'microservices':
+      rules.push(namingConventionRule);
+      break;
+    case 'modular-monolith':
+      rules.push(moduleIsolationRule, namingConventionRule);
       break;
   }
 
