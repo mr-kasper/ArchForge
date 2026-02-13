@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src",
+    "paths": {
+      "@archforge/core-engine": ["../core-engine/src/index.ts"]
+    },
+    "baseUrl": "."
+  },
+  "include": ["src/**/*"],
+  "references": [{ "path": "../core-engine" }]
+}

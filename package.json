@@ -1,0 +1,38 @@
+{
+  "name": "archforge",
+  "version": "1.0.0",
+  "description": "Universal Architecture Generator — stack-agnostic CLI that generates standardized, production-ready project architectures",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build:engine && npm run build:cli",
+    "build:engine": "npm run build --workspace=packages/core-engine",
+    "build:cli": "npm run build --workspace=packages/cli",
+    "dev": "npm run dev --workspace=packages/cli",
+    "test": "npm run test --workspaces --if-present",
+    "lint": "eslint packages/*/src/**/*.ts",
+    "clean": "rimraf packages/*/dist",
+    "archforge": "node packages/cli/dist/index.js"
+  },
+  "keywords": [
+    "architecture",
+    "generator",
+    "cli",
+    "scaffolding",
+    "clean-architecture",
+    "monorepo",
+    "developer-tools"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "typescript": "^5.3.3",
+    "rimraf": "^5.0.5",
+    "eslint": "^8.56.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "@typescript-eslint/eslint-plugin": "^6.19.0"
+  }
+}
