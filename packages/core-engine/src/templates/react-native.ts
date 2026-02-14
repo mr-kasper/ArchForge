@@ -65,7 +65,7 @@ const appJson = {
   "expo": {
     "name": "<%= projectName %>",
     "slug": "<%= projectName %>",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "scheme": "<%= projectName %>",
     "platforms": ["ios", "android"],
     "newArchEnabled": true

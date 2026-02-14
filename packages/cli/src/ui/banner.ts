@@ -20,5 +20,5 @@ export function banner(): void {
   } catch {
     console.log(chalk.cyan(LOGO));
   }
-  console.log(chalk.dim('  Universal Architecture Generator — v1.0.0\n'));
+  console.log(chalk.dim('  Universal Architecture Generator — v1.1.0\n'));
 }

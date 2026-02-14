@@ -15,7 +15,7 @@ export const reactFeatureSlicedManifest: TemplateManifest = {
       content: `{
   "name": "<%= projectName %>",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",

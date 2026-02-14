@@ -15,7 +15,7 @@ const program = new Command();
 program
   .name('archforge')
   .description('Universal Architecture Generator — generate production-ready project scaffolds')
-  .version('1.0.0')
+  .version('1.1.0')
   .hook('preAction', () => {
     banner();
   });

@@ -32,7 +32,7 @@ Many companies suffer from **inconsistent project architectures** across teams a
 
 **ArchForge** solves this by providing a **single CLI tool** that:
 
-- ✅ Generates **standardized architectures** across React, Java, and .NET
+- ✅ Generates **standardized architectures** across **11 technology stacks** (React, Next.js, Angular, Vue, Node.js, Java, .NET, Django, Laravel, React Native, Flutter)
 - ✅ **Enforces architectural rules** (not just files — actual dependency constraints)
 - ✅ Pre-configures **tooling** (Docker, CI/CD, testing) out of the box
 - ✅ Supports **10 architecture styles** (Clean, Layered, Hexagonal, DDD, CQRS, Microservices, etc.)
@@ -55,10 +55,18 @@ archforge/
 │   │   │   ├── plugin-loader.ts      # Plugin discovery and loading
 │   │   │   ├── generator.ts          # Orchestrates project generation
 │   │   │   ├── architecture-definitions.ts  # Declarative architecture configs
-│   │   │   └── templates/            # Built-in template definitions
-│   │   │       ├── react.ts          # Clean, Feature-based, Layered
-│   │   │       ├── java.ts           # Clean, Layered
-│   │   │       ├── dotnet.ts         # Clean, Layered
+│   │   │   └── templates/            # Built-in template definitions (42 templates)
+│   │   │       ├── react.ts          # React — Clean, Feature-based, Layered
+│   │   │       ├── nextjs.ts         # Next.js — Clean, Feature-based
+│   │   │       ├── angular.ts        # Angular — Clean, Layered
+│   │   │       ├── vue.ts            # Vue.js — Feature-based
+│   │   │       ├── nodejs.ts         # Node.js — Clean, Layered, MVC, Hexagonal, Microservices
+│   │   │       ├── java.ts           # Java — Clean, Layered
+│   │   │       ├── dotnet.ts         # .NET — Clean, Layered
+│   │   │       ├── django.ts         # Django — MVC, Layered, Clean
+│   │   │       ├── laravel.ts        # Laravel — MVC, Layered, Modular Monolith
+│   │   │       ├── react-native.ts   # React Native — Clean, Feature-based
+│   │   │       ├── flutter.ts        # Flutter — Clean, Feature-based
 │   │   │       ├── hexagonal.ts      # Hexagonal / Ports & Adapters
 │   │   │       ├── ddd.ts            # Domain-Driven Design
 │   │   │       ├── feature-sliced.ts # Feature-Sliced Design (React)
@@ -153,7 +161,7 @@ npx @archforge/cli init
 # Quick mode — pass flags directly
 archforge init --name my-api --stack java --architecture clean --database postgresql --auth jwt
 
-# List all 20 available templates
+# List all 42 available templates
 archforge list
 
 # Validate architecture of an existing project
@@ -172,7 +180,7 @@ $ archforge init
  /_/   \_\_|  \___|_| |_|_|  \___/|_|  \__, |\___|
                                         |___/
 
-  Universal Architecture Generator — v1.0.0
+  Universal Architecture Generator — v1.1.0
 
   ┌─ Project Basics
   │
@@ -241,7 +249,7 @@ $ archforge init
 
 ### 🔧 Multi-Stack Generation
 
-Generate production-ready scaffolds for three major technology stacks with a single tool.
+Generate production-ready scaffolds for **11 technology stacks** across Frontend, Backend, and Mobile with a single tool.
 
 ### 🧠 Architecture Rules Engine (Key Differentiator)
 
@@ -283,13 +291,33 @@ archforge add plugin auth-jwt
 
 ---
 
-## 📦 Supported Stacks
+## 📦 Supported Stacks (11 stacks · 42 templates)
 
-| Stack                           | Architecture Styles                                                        | Database                           | Auth                |
-| ------------------------------- | -------------------------------------------------------------------------- | ---------------------------------- | ------------------- |
-| **React** (TypeScript + Vite)   | Clean, Layered, Feature-based, Feature-Sliced Design                       | PostgreSQL, MongoDB, None          | JWT, OAuth, Session |
-| **Java** (Spring Boot + Gradle) | Clean, Layered, Hexagonal, DDD, MVC, CQRS, Microservices, Modular Monolith | PostgreSQL, MySQL, MongoDB, SQLite | JWT, OAuth, Session |
-| **.NET** (ASP.NET Core 8 + C#)  | Clean, Layered, Hexagonal, DDD, MVC, CQRS, Microservices, Modular Monolith | PostgreSQL, MySQL, MongoDB, SQLite | JWT, OAuth, Session |
+### Frontend
+
+| Stack                               | Architecture Styles                                  |
+| ----------------------------------- | ---------------------------------------------------- |
+| **React** (TypeScript + Vite 7)     | Clean, Layered, Feature-based, Feature-Sliced Design |
+| **Next.js** (App Router + SSR)      | Clean, Feature-based                                 |
+| **Angular** (Standalone Components) | Clean, Layered                                       |
+| **Vue.js** (Composition API + Vite) | Feature-based                                        |
+
+### Backend
+
+| Stack                              | Architecture Styles                                                        |
+| ---------------------------------- | -------------------------------------------------------------------------- |
+| **Node.js** (Express + TypeScript) | Clean, Layered, MVC, Hexagonal, Microservices                              |
+| **Java** (Spring Boot + Gradle)    | Clean, Layered, Hexagonal, DDD, MVC, CQRS, Microservices, Modular Monolith |
+| **.NET** (ASP.NET Core 8 + C#)     | Clean, Layered, Hexagonal, DDD, MVC, CQRS, Microservices, Modular Monolith |
+| **Django** (Python + DRF)          | MVC, Layered, Clean                                                        |
+| **Laravel** (PHP 8.3 + Eloquent)   | MVC, Layered, Modular Monolith                                             |
+
+### Mobile
+
+| Stack                                | Architecture Styles  |
+| ------------------------------------ | -------------------- |
+| **React Native** (Expo + TypeScript) | Clean, Feature-based |
+| **Flutter** (Dart + Riverpod)        | Clean, Feature-based |
 
 ### Recommended Architectures (covers 90% of real codebases)
 
@@ -313,15 +341,15 @@ archforge add plugin auth-jwt
 
 ### Additional Options (Context-Aware)
 
-| Option            | React                                             | Java                | .NET                |
-| ----------------- | ------------------------------------------------- | ------------------- | ------------------- |
-| **CSS Framework** | Tailwind v4, CSS Modules, Styled Components, Sass | —                   | —                   |
-| **State Mgmt**    | Zustand 5, Redux Toolkit 2, Jotai 2, Context      | —                   | —                   |
-| **ORM**           | —                                                 | Hibernate / JPA     | EF Core 8           |
-| **API Style**     | —                                                 | REST, GraphQL, gRPC | REST, GraphQL, gRPC |
-| **Validation**    | Zod 4                                             | Bean Validation     | FluentValidation    |
-| **Logging**       | —                                                 | SLF4J + Logback     | Serilog             |
-| **Pkg Manager**   | npm, Yarn, pnpm                                   | Gradle              | dotnet CLI          |
+| Option            | Frontend (React/Next/Angular/Vue)                 | Backend (Node/Java/.NET/Django/Laravel)  | Mobile (RN/Flutter) |
+| ----------------- | ------------------------------------------------- | ---------------------------------------- | ------------------- |
+| **CSS Framework** | Tailwind v4, CSS Modules, Styled Components, Sass | —                                        | —                   |
+| **State Mgmt**    | Zustand 5, Redux 2, Jotai 2, Pinia, NgRx, Context | —                                        | —                   |
+| **ORM**           | Prisma                                            | Hibernate, EF Core, Django ORM, Eloquent | —                   |
+| **API Style**     | —                                                 | REST, GraphQL, gRPC                      | —                   |
+| **Validation**    | Zod 4, class-validator                            | Bean Validation, FluentValidation        | —                   |
+| **Logging**       | —                                                 | Winston, SLF4J, Serilog, Python logging  | —                   |
+| **Pkg Manager**   | npm, Yarn, pnpm                                   | npm, Gradle, dotnet, pip, Composer       | npm, pub            |
 
 ### Generated Architecture Examples
 
@@ -387,15 +415,25 @@ src/
 - [x] `prepublishOnly` auto-build, `files` field (ships only `dist/`)
 - [x] `engines`, `keywords`, `repository`, `homepage` metadata
 
-### Phase 5 — Next
+### Phase 5 — Stack Expansion ✅
+
+- [x] 8 new stacks: Node.js, Next.js, Angular, Vue.js, Django, Laravel, React Native, Flutter
+- [x] 22 new template manifests (42 total)
+- [x] Stack categories: Frontend, Backend, Mobile
+- [x] Per-stack options: Pinia (Vue), NgRx (Angular), Django ORM, Eloquent, Riverpod, etc.
+- [x] Python (.py), PHP (.php), Dart (.dart) import extractors in rules engine
+- [x] Docker, CI/CD, and test templates for all 11 stacks
+- [x] Published as v1.1.0
+
+### Phase 6 — Next
 
 - [ ] Versioned templates (`archforge init --template react@1.2`)
 - [ ] Custom template authoring guide + CLI
 - [ ] Watch mode for architecture validation
 - [ ] VS Code extension for inline rule violations
-- [ ] Additional stacks: Go, Python (FastAPI), Rust
+- [ ] Additional stacks: Go, Rust, Kotlin Multiplatform
 
-### Phase 6 — Enterprise
+### Phase 7 — Enterprise
 
 - [ ] Team-shared configuration profiles
 - [ ] Remote template registries
@@ -409,13 +447,13 @@ src/
 
 This project demonstrates skills that **platform engineering**, **tech lead**, and **senior engineering** roles require:
 
-| Skill                    | How ArchForge Demonstrates It                                   |
-| ------------------------ | --------------------------------------------------------------- |
-| **Architecture Design**  | Multi-layer, clean architecture enforcement across stacks       |
-| **Platform Engineering** | Developer tooling that standardizes workflows at scale          |
-| **Developer Experience** | Interactive CLI, helpful error messages, pre-configured tooling |
-| **Extensibility**        | Plugin system, template registry, rule composition              |
-| **Cross-stack Thinking** | Single tool supporting React, Java, and .NET                    |
+| Skill                    | How ArchForge Demonstrates It                                         |
+| ------------------------ | --------------------------------------------------------------------- |
+| **Architecture Design**  | Multi-layer, clean architecture enforcement across stacks             |
+| **Platform Engineering** | Developer tooling that standardizes workflows at scale                |
+| **Developer Experience** | Interactive CLI, helpful error messages, pre-configured tooling       |
+| **Extensibility**        | Plugin system, template registry, rule composition                    |
+| **Cross-stack Thinking** | Single tool supporting 11 stacks across Frontend, Backend, and Mobile |
 
 ---
 

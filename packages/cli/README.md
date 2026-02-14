@@ -28,9 +28,9 @@ archforge init
 
 ## ✨ Features
 
-- **3 Stacks** — React (TypeScript + Vite 7), Java (Spring Boot + Gradle), .NET (ASP.NET Core 8)
+- **11 Stacks** — React, Next.js, Angular, Vue.js, Node.js, Java, .NET, Django, Laravel, React Native, Flutter
 - **10 Architecture Styles** — Clean, Layered, Feature-based, Feature-Sliced, Hexagonal, DDD, MVC, CQRS, Microservices, Modular Monolith
-- **20 Templates** — Every stack × architecture combination
+- **42 Templates** — Every supported stack × architecture combination
 - **9 Architecture Rules** — Enforces dependency constraints, not just file layout
 - **Context-Aware Prompts** — CSS framework, state management, ORM, validation, logging, and more
 - **Tooling Add-ons** — Docker, CI/CD, testing, linting, Husky pre-configured out of the box
@@ -83,13 +83,33 @@ $ archforge init
 ✔ Created 18 files in ./my-saas-api
 ```
 
-## 📋 Supported Stacks
+## 📋 Supported Stacks (11 stacks · 42 templates)
 
-| Stack                           | Architecture Styles                                                        |
-| ------------------------------- | -------------------------------------------------------------------------- |
-| **React** (TypeScript + Vite)   | Clean, Layered, Feature-based, Feature-Sliced Design                       |
-| **Java** (Spring Boot + Gradle) | Clean, Layered, Hexagonal, DDD, MVC, CQRS, Microservices, Modular Monolith |
-| **.NET** (ASP.NET Core 8 + C#)  | Clean, Layered, Hexagonal, DDD, MVC, CQRS, Microservices, Modular Monolith |
+### Frontend
+
+| Stack                               | Architecture Styles                                  |
+| ----------------------------------- | ---------------------------------------------------- |
+| **React** (TypeScript + Vite 7)     | Clean, Layered, Feature-based, Feature-Sliced Design |
+| **Next.js** (App Router + SSR)      | Clean, Feature-based                                 |
+| **Angular** (Standalone Components) | Clean, Layered                                       |
+| **Vue.js** (Composition API + Vite) | Feature-based                                        |
+
+### Backend
+
+| Stack                              | Architecture Styles                                                        |
+| ---------------------------------- | -------------------------------------------------------------------------- |
+| **Node.js** (Express + TypeScript) | Clean, Layered, MVC, Hexagonal, Microservices                              |
+| **Java** (Spring Boot + Gradle)    | Clean, Layered, Hexagonal, DDD, MVC, CQRS, Microservices, Modular Monolith |
+| **.NET** (ASP.NET Core 8 + C#)     | Clean, Layered, Hexagonal, DDD, MVC, CQRS, Microservices, Modular Monolith |
+| **Django** (Python + DRF)          | MVC, Layered, Clean                                                        |
+| **Laravel** (PHP 8.3 + Eloquent)   | MVC, Layered, Modular Monolith                                             |
+
+### Mobile
+
+| Stack                                | Architecture Styles  |
+| ------------------------------------ | -------------------- |
+| **React Native** (Expo + TypeScript) | Clean, Feature-based |
+| **Flutter** (Dart + Riverpod)        | Clean, Feature-based |
 
 ### ✅ Recommended Architectures (covers 90% of real codebases)
 
@@ -107,14 +127,14 @@ Hexagonal · DDD · CQRS · Microservices · Feature-Sliced Design
 
 ### Context-Aware Options
 
-| Option            | React                                             | Java                | .NET                |
-| ----------------- | ------------------------------------------------- | ------------------- | ------------------- |
-| **CSS Framework** | Tailwind v4, CSS Modules, Styled Components, Sass | —                   | —                   |
-| **State Mgmt**    | Zustand 5, Redux Toolkit 2, Jotai 2, Context      | —                   | —                   |
-| **ORM**           | —                                                 | Hibernate / JPA     | EF Core 8           |
-| **API Style**     | —                                                 | REST, GraphQL, gRPC | REST, GraphQL, gRPC |
-| **Validation**    | Zod 4                                             | Bean Validation     | FluentValidation    |
-| **Logging**       | —                                                 | SLF4J + Logback     | Serilog             |
+| Option            | Frontend (React/Next/Angular/Vue)                 | Backend (Node/Java/.NET/Django/Laravel)  | Mobile (RN/Flutter) |
+| ----------------- | ------------------------------------------------- | ---------------------------------------- | ------------------- |
+| **CSS Framework** | Tailwind v4, CSS Modules, Styled Components, Sass | —                                        | —                   |
+| **State Mgmt**    | Zustand 5, Redux 2, Jotai 2, Pinia, NgRx, Context | —                                        | —                   |
+| **ORM**           | Prisma                                            | Hibernate, EF Core, Django ORM, Eloquent | —                   |
+| **API Style**     | —                                                 | REST, GraphQL, gRPC                      | —                   |
+| **Validation**    | Zod 4, class-validator                            | Bean Validation, FluentValidation        | —                   |
+| **Logging**       | —                                                 | Winston, SLF4J, Serilog, Python logging  | —                   |
 
 ## 🧪 Architecture Rules Engine
 

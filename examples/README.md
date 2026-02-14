@@ -76,30 +76,130 @@ archforge init --name my-service --stack dotnet --architecture clean --database 
 archforge init --name my-hex-service --stack dotnet --architecture hexagonal
 ```
 
-## All 20 Templates
+### Node.js + Clean Architecture
 
-| #   | Stack | Architecture     |
-| --- | ----- | ---------------- |
-| 1   | React | Clean            |
-| 2   | React | Layered          |
-| 3   | React | Feature-based    |
-| 4   | React | Feature-Sliced   |
-| 5   | Java  | Clean            |
-| 6   | Java  | Layered          |
-| 7   | Java  | Hexagonal        |
-| 8   | Java  | DDD              |
-| 9   | Java  | MVC              |
-| 10  | Java  | CQRS             |
-| 11  | Java  | Microservices    |
-| 12  | Java  | Modular Monolith |
-| 13  | .NET  | Clean            |
-| 14  | .NET  | Layered          |
-| 15  | .NET  | Hexagonal        |
-| 16  | .NET  | DDD              |
-| 17  | .NET  | MVC              |
-| 18  | .NET  | CQRS             |
-| 19  | .NET  | Microservices    |
-| 20  | .NET  | Modular Monolith |
+```bash
+archforge init --name my-node-api --stack nodejs --architecture clean --database postgresql --auth jwt
+```
+
+### Node.js + MVC
+
+```bash
+archforge init --name my-express-app --stack nodejs --architecture mvc
+```
+
+### Node.js + Microservices
+
+```bash
+archforge init --name my-node-microservices --stack nodejs --architecture microservices
+```
+
+### Next.js + Clean Architecture
+
+```bash
+archforge init --name my-nextjs-app --stack nextjs --architecture clean
+```
+
+### Angular + Clean Architecture
+
+```bash
+archforge init --name my-angular-app --stack angular --architecture clean
+```
+
+### Vue.js + Feature-based
+
+```bash
+archforge init --name my-vue-app --stack vue --architecture feature-based
+```
+
+### Django + MVC
+
+```bash
+archforge init --name my-django-api --stack django --architecture mvc --database postgresql
+```
+
+### Laravel + MVC
+
+```bash
+archforge init --name my-laravel-app --stack laravel --architecture mvc --database mysql
+```
+
+### Laravel + Modular Monolith
+
+```bash
+archforge init --name my-laravel-modular --stack laravel --architecture modular-monolith
+```
+
+### React Native + Clean Architecture
+
+```bash
+archforge init --name my-mobile-app --stack react-native --architecture clean
+```
+
+### Flutter + Feature-based
+
+```bash
+archforge init --name my-flutter-app --stack flutter --architecture feature-based
+```
+
+## All 42 Templates
+
+### Frontend
+
+| #   | Stack   | Architecture   |
+| --- | ------- | -------------- |
+| 1   | React   | Clean          |
+| 2   | React   | Layered        |
+| 3   | React   | Feature-based  |
+| 4   | React   | Feature-Sliced |
+| 5   | Next.js | Clean          |
+| 6   | Next.js | Feature-based  |
+| 7   | Angular | Clean          |
+| 8   | Angular | Layered        |
+| 9   | Vue.js  | Feature-based  |
+
+### Backend
+
+| #   | Stack   | Architecture     |
+| --- | ------- | ---------------- |
+| 10  | Node.js | Clean            |
+| 11  | Node.js | Layered          |
+| 12  | Node.js | MVC              |
+| 13  | Node.js | Hexagonal        |
+| 14  | Node.js | Microservices    |
+| 15  | Java    | Clean            |
+| 16  | Java    | Layered          |
+| 17  | Java    | Hexagonal        |
+| 18  | Java    | DDD              |
+| 19  | Java    | MVC              |
+| 20  | Java    | CQRS             |
+| 21  | Java    | Microservices    |
+| 22  | Java    | Modular Monolith |
+| 23  | .NET    | Clean            |
+| 24  | .NET    | Layered          |
+| 25  | .NET    | Hexagonal        |
+| 26  | .NET    | DDD              |
+| 27  | .NET    | MVC              |
+| 28  | .NET    | CQRS             |
+| 29  | .NET    | Microservices    |
+| 30  | .NET    | Modular Monolith |
+| 31  | Django  | MVC              |
+| 32  | Django  | Layered          |
+| 33  | Django  | Clean            |
+| 34  | Laravel | MVC              |
+| 35  | Laravel | Layered          |
+| 36  | Laravel | Modular Monolith |
+
+### Mobile
+
+| #   | Stack        | Architecture  |
+| --- | ------------ | ------------- |
+| 37  | React Native | Clean         |
+| 38  | React Native | Feature-based |
+| 39  | Flutter      | Clean         |
+| 40  | Flutter      | Feature-based |
+| 41  | React Native | Layered       |
+| 42  | Flutter      | Layered       |
 
 ## Generated Structure Preview
 

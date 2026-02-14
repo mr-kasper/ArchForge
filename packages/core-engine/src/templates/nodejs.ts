@@ -11,7 +11,7 @@ const packageJson = {
   path: 'package.json',
   content: `{
   "name": "<%= projectName %>",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "scripts": {
     "dev": "tsx watch src/index.ts",

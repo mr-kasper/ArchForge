@@ -42,13 +42,13 @@ const rendered = engine.render(templateContent, context);
 
 ### Template Registry
 
-Maps `(stack, architecture)` combinations to template manifests — 20 built-in templates across 3 stacks and 10 architecture styles.
+Maps `(stack, architecture)` combinations to template manifests — 42 built-in templates across 11 stacks and 10 architecture styles.
 
 ```typescript
 import { TemplateRegistry } from '@archforge/core-engine';
 
 const registry = new TemplateRegistry();
-const templates = registry.getAll(); // All 20 templates
+const templates = registry.getAll(); // All 42 templates
 const template = registry.get('react', 'clean'); // Specific template
 ```
 
@@ -83,13 +83,33 @@ await generator.generate({
 });
 ```
 
-## 📋 Supported Stacks & Architectures
+## 📋 Supported Stacks & Architectures (42 templates)
 
-| Stack     | Architectures                                                              |
-| --------- | -------------------------------------------------------------------------- |
-| **React** | Clean, Layered, Feature-based, Feature-Sliced Design                       |
-| **Java**  | Clean, Layered, Hexagonal, DDD, MVC, CQRS, Microservices, Modular Monolith |
-| **.NET**  | Clean, Layered, Hexagonal, DDD, MVC, CQRS, Microservices, Modular Monolith |
+### Frontend
+
+| Stack       | Architectures                                        |
+| ----------- | ---------------------------------------------------- |
+| **React**   | Clean, Layered, Feature-based, Feature-Sliced Design |
+| **Next.js** | Clean, Feature-based                                 |
+| **Angular** | Clean, Layered                                       |
+| **Vue.js**  | Feature-based                                        |
+
+### Backend
+
+| Stack       | Architectures                                                              |
+| ----------- | -------------------------------------------------------------------------- |
+| **Node.js** | Clean, Layered, MVC, Hexagonal, Microservices                              |
+| **Java**    | Clean, Layered, Hexagonal, DDD, MVC, CQRS, Microservices, Modular Monolith |
+| **.NET**    | Clean, Layered, Hexagonal, DDD, MVC, CQRS, Microservices, Modular Monolith |
+| **Django**  | MVC, Layered, Clean                                                        |
+| **Laravel** | MVC, Layered, Modular Monolith                                             |
+
+### Mobile
+
+| Stack            | Architectures        |
+| ---------------- | -------------------- |
+| **React Native** | Clean, Feature-based |
+| **Flutter**      | Clean, Feature-based |
 
 **Recommended (baseline):** Clean · Layered · MVC · Feature-based · Modular Monolith
 

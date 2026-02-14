@@ -12,9 +12,7 @@ ArchForge enforces architectural boundaries at the structural level. These rules
 
 ### `clean/domain-isolation`
 
-**Applies to:** `**/domain/**/*.{ts,java,cs}`
-
-The domain layer is the core of your application. It must remain pure and free from infrastructure or presentation concerns.
+**Applies to:** `**/domain/**/*.{ts,tsx,java,cs,py,php,dart}` It must remain pure and free from infrastructure or presentation concerns.
 
 **Forbidden imports from domain layer:**
 
@@ -34,9 +32,7 @@ import { PrismaClient } from '../../infrastructure/database'; // ❌ VIOLATION
 
 ### `clean/application-isolation`
 
-**Applies to:** `**/application/**/*.{ts,java,cs}`
-
-The application layer orchestrates use cases. It should only depend on the domain layer, never on presentation.
+**Applies to:** `**/application/**/*.{ts,tsx,java,cs,py,php,dart}` It should only depend on the domain layer, never on presentation.
 
 **Forbidden imports:**
 
@@ -46,7 +42,7 @@ The application layer orchestrates use cases. It should only depend on the domai
 
 ### `feature/isolation`
 
-**Applies to:** `**/features/**/*.{ts,tsx,java,cs}`
+**Applies to:** `**/features/**/*.{ts,tsx,java,cs,py,php,dart,vue}`
 
 In feature-based architecture, each feature module must be self-contained. Features should communicate only through shared modules, never import directly from other features.
 
@@ -63,7 +59,7 @@ import { UserCard } from '../../profile/components/UserCard'; // ❌ VIOLATION
 
 ### `naming/no-impl-in-domain`
 
-**Applies to:** `**/domain/**/*.{ts,java,cs}`
+**Applies to:** `**/domain/**/*.{ts,tsx,java,cs,py,php,dart}`
 
 Domain layer files should not contain "Impl" in their names. Implementation classes belong in the infrastructure layer.
 
@@ -79,7 +75,7 @@ src/domain/repositories/UserRepositoryImpl.ts  // ❌ VIOLATION
 
 ### `hexagonal/port-isolation`
 
-**Applies to:** `**/ports/**/*.{ts,java,cs}`
+**Applies to:** `**/ports/**/*.{ts,tsx,java,cs,py,php,dart}`
 
 In Hexagonal (Ports & Adapters) architecture, the ports layer defines interfaces that adapters implement. Ports must never import from adapters — this enforces the Dependency Inversion Principle.
 
@@ -100,7 +96,7 @@ import com.myapp.adapters.persistence.OrderJpaRepository; // ❌ VIOLATION
 
 ### `ddd/aggregate-isolation`
 
-**Applies to:** `**/domain/model/aggregate/**/*.{ts,java,cs}`
+**Applies to:** `**/domain/model/aggregate/**/*.{ts,tsx,java,cs,py,php,dart}`
 
 In Domain-Driven Design, aggregates are consistency boundaries. Each aggregate should be self-contained and never import directly from another aggregate. Cross-aggregate communication happens via domain events or application services.
 
@@ -142,7 +138,7 @@ import { useAuth } from '../../features/auth/hooks'; // ❌ VIOLATION
 
 ### `cqrs/segregation`
 
-**Applies to:** `**/commands/**/*.{ts,java,cs}` and `**/queries/**/*.{ts,java,cs}`
+**Applies to:** `**/commands/**/*.{ts,tsx,java,cs,py,php,dart}` and `**/queries/**/*.{ts,tsx,java,cs,py,php,dart}`
 
 CQRS (Command/Query Responsibility Segregation) requires that command handlers and query handlers remain completely separate. Commands must not import from queries and vice versa.
 
@@ -162,7 +158,7 @@ import com.myapp.queries.GetOrderQuery; // ❌ VIOLATION
 
 ### `modular/module-isolation`
 
-**Applies to:** `**/modules/*/internal/**/*.{ts,java,cs}`
+**Applies to:** `**/modules/*/internal/**/*.{ts,tsx,java,cs,py,php,dart}`
 
 In a Modular Monolith, each module's internal implementation is private. Modules can only communicate through their public API (typically an `api/` or `public/` directory). The `internal/` directory is off-limits to other modules.
 
@@ -196,6 +192,20 @@ archforge lint-architecture --dir ./my-project --architecture feature-sliced
 # Validate CQRS segregation
 archforge lint-architecture --dir ./my-project --architecture cqrs
 ```
+
+## Supported Languages
+
+The rules engine includes import extractors for the following file types:
+
+| Language   | Extensions    | Import Patterns Detected                                  |
+| ---------- | ------------- | --------------------------------------------------------- |
+| TypeScript | `.ts`, `.tsx` | `import ... from '...'`, `import '...'`, `require('...')` |
+| Java       | `.java`       | `import com.example...`                                   |
+| C#         | `.cs`         | `using Namespace...`                                      |
+| Python     | `.py`         | `import module`, `from module import ...`                 |
+| PHP        | `.php`        | `use Namespace\Class`, `require ...`                      |
+| Dart       | `.dart`       | `import 'package:...'`, `import '...'`                    |
+| Vue        | `.vue`        | `import ... from '...'` (within `<script>` blocks)        |
 
 ## Rules per Architecture
 

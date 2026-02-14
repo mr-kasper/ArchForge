@@ -43,7 +43,7 @@ async function loadPluginFromDir(dir: string): Promise<PluginDefinition> {
 
   return {
     name: manifest.name,
-    version: manifest.version || '1.0.0',
+    version: manifest.version || '1.1.0',
     description: manifest.description || '',
     files,
     dependencies: manifest.dependencies || {},

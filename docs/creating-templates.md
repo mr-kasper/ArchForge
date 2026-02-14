@@ -14,7 +14,7 @@ Each template is defined as a `TemplateManifest`:
 
 ```typescript
 interface TemplateManifest {
-  stack: Stack; // 'react' | 'java' | 'dotnet'
+  stack: Stack; // 'react' | 'nextjs' | 'angular' | 'vue' | 'nodejs' | 'java' | 'dotnet' | 'django' | 'laravel' | 'react-native' | 'flutter'
   architecture: ArchitectureStyle; // 'clean' | 'layered' | 'feature-based' | 'hexagonal' | 'ddd' | ...
   files: TemplateFile[]; // Array of files to generate
   postMessages?: string[]; // Instructions shown after generation
@@ -30,23 +30,23 @@ interface TemplateFile {
 
 All templates receive these variables via the `RenderContext`:
 
-| Variable          | Type       | Description                                                          |
-| ----------------- | ---------- | -------------------------------------------------------------------- |
-| `projectName`     | `string`   | User-provided project name                                           |
-| `stack`           | `string`   | Selected technology stack                                            |
-| `architecture`    | `string`   | Selected architecture style                                          |
-| `database`        | `string`   | Database option (postgresql, mysql, mongodb, sqlite, none)           |
-| `auth`            | `string`   | Auth option (jwt, oauth, session, none)                              |
-| `tooling`         | `string[]` | Selected tooling options                                             |
-| `packageManager`  | `string`   | Package manager (npm, yarn, pnpm, gradle, dotnet)                    |
-| `apiStyle`        | `string`   | API style (rest, graphql, grpc, none)                                |
-| `cssFramework`    | `string`   | CSS framework (tailwind, css-modules, styled-components, sass, none) |
-| `stateManagement` | `string`   | State management (zustand, redux, jotai, context, none)              |
-| `orm`             | `string`   | ORM (prisma, typeorm, hibernate, ef-core, none)                      |
-| `logging`         | `string`   | Logging framework (slf4j, serilog, winston, none)                    |
-| `validation`      | `string`   | Validation library (zod, bean-validation, fluent-validation, none)   |
-| `port`            | `number`   | Server port (default 8080)                                           |
-| `year`            | `number`   | Current year                                                         |
+| Variable          | Type       | Description                                                                         |
+| ----------------- | ---------- | ----------------------------------------------------------------------------------- |
+| `projectName`     | `string`   | User-provided project name                                                          |
+| `stack`           | `string`   | Selected technology stack                                                           |
+| `architecture`    | `string`   | Selected architecture style                                                         |
+| `database`        | `string`   | Database option (postgresql, mysql, mongodb, sqlite, none)                          |
+| `auth`            | `string`   | Auth option (jwt, oauth, session, none)                                             |
+| `tooling`         | `string[]` | Selected tooling options                                                            |
+| `packageManager`  | `string`   | Package manager (npm, yarn, pnpm, gradle, dotnet, pip, composer, pub)               |
+| `apiStyle`        | `string`   | API style (rest, graphql, grpc, none)                                               |
+| `cssFramework`    | `string`   | CSS framework (tailwind, css-modules, styled-components, sass, none)                |
+| `stateManagement` | `string`   | State management (zustand, redux, jotai, pinia, ngrx, context, none)                |
+| `orm`             | `string`   | ORM (prisma, typeorm, hibernate, ef-core, django-orm, eloquent, none)               |
+| `logging`         | `string`   | Logging framework (winston, slf4j, serilog, python-logging, laravel-log, none)      |
+| `validation`      | `string`   | Validation library (zod, class-validator, bean-validation, fluent-validation, none) |
+| `port`            | `number`   | Server port (default 8080)                                                          |
+| `year`            | `number`   | Current year                                                                        |
 
 ## Conditional Content
 
@@ -90,20 +90,22 @@ ArchForge supports 10 architecture styles across 3 stacks (20 total templates):
 
 The generator injects additional files based on user selections. These are defined in `generator.ts`:
 
-| Add-on            | Condition                              | Files Generated                                  |
-| ----------------- | -------------------------------------- | ------------------------------------------------ |
-| Docker            | `tooling.includes('docker')`           | `Dockerfile`, `.dockerignore`                    |
-| CI/CD             | `tooling.includes('ci')`               | `.github/workflows/ci.yml`                       |
-| Tests             | `tooling.includes('tests')`            | `vitest.config.ts`, `App.test.tsx`               |
-| Tailwind CSS v4   | `cssFramework === 'tailwind'`          | `src/index.css` (with `@import "tailwindcss"`)   |
-| Sass              | `cssFramework === 'sass'`              | `_variables.scss`, `_mixins.scss`, `global.scss` |
-| CSS Modules       | `cssFramework === 'css-modules'`       | `App.module.css`                                 |
-| Styled Components | `cssFramework === 'styled-components'` | `theme.ts`, `GlobalStyle.ts`                     |
-| Zustand           | `stateManagement === 'zustand'`        | `store/useAppStore.ts`                           |
-| Redux Toolkit     | `stateManagement === 'redux'`          | `store/index.ts`, `counterSlice.ts`, `hooks.ts`  |
-| Jotai             | `stateManagement === 'jotai'`          | `store/atoms.ts`                                 |
-| Linting           | `tooling.includes('linting')`          | `.prettierrc`, ESLint flat config                |
-| Husky             | `tooling.includes('husky')`            | `.husky/pre-commit`, `.lintstagedrc.json`        |
+| Add-on            | Condition                              | Files Generated                                          |
+| ----------------- | -------------------------------------- | -------------------------------------------------------- |
+| Docker            | `tooling.includes('docker')`           | `Dockerfile`, `.dockerignore` (per-stack optimized)      |
+| CI/CD             | `tooling.includes('ci')`               | `.github/workflows/ci.yml` (per-stack build steps)       |
+| Tests             | `tooling.includes('tests')`            | Vitest / JUnit / xUnit / pytest / PHPUnit / flutter_test |
+| Tailwind CSS v4   | `cssFramework === 'tailwind'`          | `src/index.css` (with `@import "tailwindcss"`)           |
+| Sass              | `cssFramework === 'sass'`              | `_variables.scss`, `_mixins.scss`, `global.scss`         |
+| CSS Modules       | `cssFramework === 'css-modules'`       | `App.module.css`                                         |
+| Styled Components | `cssFramework === 'styled-components'` | `theme.ts`, `GlobalStyle.ts`                             |
+| Zustand           | `stateManagement === 'zustand'`        | `store/useAppStore.ts`                                   |
+| Redux Toolkit     | `stateManagement === 'redux'`          | `store/index.ts`, `counterSlice.ts`, `hooks.ts`          |
+| Jotai             | `stateManagement === 'jotai'`          | `store/atoms.ts`                                         |
+| Pinia             | `stateManagement === 'pinia'`          | `stores/counter.ts`                                      |
+| NgRx              | `stateManagement === 'ngrx'`           | `store/app.state.ts`, `app.actions.ts`                   |
+| Linting           | `tooling.includes('linting')`          | `.prettierrc`, ESLint flat config                        |
+| Husky             | `tooling.includes('husky')`            | `.husky/pre-commit`, `.lintstagedrc.json`                |
 
 ## Creating a Plugin Template
 
@@ -112,7 +114,7 @@ The generator injects additional files based on user selections. These are defin
 ```json
 {
   "name": "my-custom-template",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Custom template for my team",
   "dependencies": {},
   "devDependencies": {}
