@@ -91,6 +91,10 @@ await generator.generate({
 | **Java**  | Clean, Layered, Hexagonal, DDD, MVC, CQRS, Microservices, Modular Monolith |
 | **.NET**  | Clean, Layered, Hexagonal, DDD, MVC, CQRS, Microservices, Modular Monolith |
 
+**Recommended (baseline):** Clean · Layered · MVC · Feature-based · Modular Monolith
+
+**Advanced (situational):** Hexagonal · DDD · CQRS · Microservices · Feature-Sliced
+
 ## 🧪 Architecture Rules (9 total)
 
 | Rule                          | Description                                              |

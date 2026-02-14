@@ -91,6 +91,20 @@ $ archforge init
 | **Java** (Spring Boot + Gradle) | Clean, Layered, Hexagonal, DDD, MVC, CQRS, Microservices, Modular Monolith |
 | **.NET** (ASP.NET Core 8 + C#)  | Clean, Layered, Hexagonal, DDD, MVC, CQRS, Microservices, Modular Monolith |
 
+### ✅ Recommended Architectures (covers 90% of real codebases)
+
+| Architecture             | Best For                              |
+| ------------------------ | ------------------------------------- |
+| **Clean Architecture**   | Backend APIs, enterprise apps         |
+| **Layered Architecture** | Simple backends, quick MVPs           |
+| **MVC**                  | Server-rendered & traditional apps    |
+| **Feature-based**        | React & Next.js scalable frontends    |
+| **Modular Monolith**     | Growing backends before microservices |
+
+### ⚠️ Advanced Architectures (situational, not baseline)
+
+Hexagonal · DDD · CQRS · Microservices · Feature-Sliced Design
+
 ### Context-Aware Options
 
 | Option            | React                                             | Java                | .NET                |

@@ -1,6 +1,6 @@
 {
   "name": "@archforge/cli",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "ArchForge CLI — interactive project architecture generator",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

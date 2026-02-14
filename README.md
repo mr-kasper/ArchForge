@@ -291,6 +291,26 @@ archforge add plugin auth-jwt
 | **Java** (Spring Boot + Gradle) | Clean, Layered, Hexagonal, DDD, MVC, CQRS, Microservices, Modular Monolith | PostgreSQL, MySQL, MongoDB, SQLite | JWT, OAuth, Session |
 | **.NET** (ASP.NET Core 8 + C#)  | Clean, Layered, Hexagonal, DDD, MVC, CQRS, Microservices, Modular Monolith | PostgreSQL, MySQL, MongoDB, SQLite | JWT, OAuth, Session |
 
+### Recommended Architectures (covers 90% of real codebases)
+
+| Architecture             | Description                                          | Best For                              |
+| ------------------------ | ---------------------------------------------------- | ------------------------------------- |
+| **Clean Architecture**   | Domain → Application → Infrastructure → Presentation | Backend APIs, enterprise apps         |
+| **Layered Architecture** | Controller → Service → Repository → Model            | Simple backends, quick MVPs           |
+| **MVC**                  | Model-View-Controller + REST API                     | Server-rendered & traditional apps    |
+| **Feature-based**        | Self-contained feature modules                       | React & Next.js scalable frontends    |
+| **Modular Monolith**     | Isolated modules with public APIs & events           | Growing backends before microservices |
+
+### Advanced Architectures (situational, not baseline)
+
+| Architecture   | When to Use                                                  |
+| -------------- | ------------------------------------------------------------ |
+| Hexagonal      | Strong isolation requirements, dependency inversion at scale |
+| DDD            | Complex domain logic with many business rules                |
+| CQRS           | Separate read/write models, event-driven systems             |
+| Microservices  | Independent deployability at organizational scale            |
+| Feature-Sliced | Large React apps needing strict layer hierarchy              |
+
 ### Additional Options (Context-Aware)
 
 | Option            | React                                             | Java                | .NET                |

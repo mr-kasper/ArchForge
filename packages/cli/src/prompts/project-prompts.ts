@@ -98,25 +98,22 @@ export async function collectProjectConfig(
       message: 'Architecture style:',
       when: () => !overrides.architecture,
       choices: () => {
-        const common = [
-          {
-            name: '🏛️  Clean Architecture   (Domain → Application → Infrastructure → Presentation)',
-            value: 'clean',
-          },
-          {
-            name: '📚 Layered              (Controller → Service → Repository → Model)',
-            value: 'layered',
-          },
-        ];
-
         if (stack === 'react') {
           return [
-            ...common,
-            separator('React-specific'),
+            separator('Recommended'),
+            {
+              name: '🏛️  Clean Architecture   (Domain → Application → Infrastructure → Presentation)',
+              value: 'clean',
+            },
+            {
+              name: '📚 Layered              (Controller → Service → Repository → Model)',
+              value: 'layered',
+            },
             {
               name: '📦 Feature-based        (self-contained feature modules)',
               value: 'feature-based',
             },
+            separator('Other patterns'),
             {
               name: '🍰 Feature-Sliced       (app / pages / features / entities / shared)',
               value: 'feature-sliced',
@@ -126,8 +123,24 @@ export async function collectProjectConfig(
 
         // Java & .NET
         return [
-          ...common,
-          separator('Advanced patterns'),
+          separator('Recommended — covers 90% of real codebases'),
+          {
+            name: '🏛️  Clean Architecture   (Domain → Application → Infrastructure → Presentation)',
+            value: 'clean',
+          },
+          {
+            name: '📚 Layered              (Controller → Service → Repository → Model)',
+            value: 'layered',
+          },
+          {
+            name: '🎯 MVC                  (Model-View-Controller + REST API)',
+            value: 'mvc',
+          },
+          {
+            name: '🧱 Modular Monolith     (isolated modules with public APIs & events)',
+            value: 'modular-monolith',
+          },
+          separator('Advanced — situational, not baseline'),
           {
             name: '🔷 Hexagonal            (Ports & Adapters — Domain ↔ Ports ↔ Adapters)',
             value: 'hexagonal',
@@ -137,21 +150,12 @@ export async function collectProjectConfig(
             value: 'ddd',
           },
           {
-            name: '🎯 MVC                  (Model-View-Controller + REST API)',
-            value: 'mvc',
-          },
-          separator('Distributed / Scalable'),
-          {
             name: '⚡ CQRS                 (Command/Query Responsibility Segregation)',
             value: 'cqrs',
           },
           {
             name: '🌐 Microservices        (API Gateway + independent services + Docker)',
             value: 'microservices',
-          },
-          {
-            name: '🧱 Modular Monolith     (isolated modules with public APIs & events)',
-            value: 'modular-monolith',
           },
         ];
       },
