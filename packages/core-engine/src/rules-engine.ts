@@ -380,6 +380,50 @@ export function extractCSharpImports(content: string): string[] {
 }
 
 /**
+ * Extract import/from statements from a Python file.
+ */
+export function extractPythonImports(content: string): string[] {
+  const imports: string[] = [];
+  // from X import Y  or  import X
+  const fromRegex = /^from\s+([\w.]+)\s+import/gm;
+  const importRegex = /^import\s+([\w.]+)/gm;
+  let match: RegExpExecArray | null;
+  while ((match = fromRegex.exec(content)) !== null) {
+    imports.push(match[1]);
+  }
+  while ((match = importRegex.exec(content)) !== null) {
+    imports.push(match[1]);
+  }
+  return imports;
+}
+
+/**
+ * Extract use/namespace statements from a PHP file.
+ */
+export function extractPhpImports(content: string): string[] {
+  const imports: string[] = [];
+  const regex = /use\s+([\w\\]+)\s*;/g;
+  let match: RegExpExecArray | null;
+  while ((match = regex.exec(content)) !== null) {
+    imports.push(match[1].replace(/\\\\/g, '.'));
+  }
+  return imports;
+}
+
+/**
+ * Extract import statements from a Dart file.
+ */
+export function extractDartImports(content: string): string[] {
+  const imports: string[] = [];
+  const regex = /import\s+['"]([^'"]+)['"]/g;
+  let match: RegExpExecArray | null;
+  while ((match = regex.exec(content)) !== null) {
+    imports.push(match[1]);
+  }
+  return imports;
+}
+
+/**
  * Detect the import extractor based on file extension.
  */
 function getImportExtractor(filePath: string): ((content: string) => string[]) | null {
@@ -389,11 +433,18 @@ function getImportExtractor(filePath: string): ((content: string) => string[]) |
     case '.tsx':
     case '.js':
     case '.jsx':
+    case '.vue':
       return extractTsImports;
     case '.java':
       return extractJavaImports;
     case '.cs':
       return extractCSharpImports;
+    case '.py':
+      return extractPythonImports;
+    case '.php':
+      return extractPhpImports;
+    case '.dart':
+      return extractDartImports;
     default:
       return null;
   }

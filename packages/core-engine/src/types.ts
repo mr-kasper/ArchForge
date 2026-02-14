@@ -2,7 +2,18 @@
 // ArchForge Core Types
 // ─────────────────────────────────────────────────────────
 
-export type Stack = 'react' | 'java' | 'dotnet';
+export type Stack =
+  | 'react'
+  | 'nextjs'
+  | 'angular'
+  | 'vue'
+  | 'java'
+  | 'dotnet'
+  | 'nodejs'
+  | 'django'
+  | 'laravel'
+  | 'react-native'
+  | 'flutter';
 
 export type ArchitectureStyle =
   | 'clean'
@@ -19,11 +30,34 @@ export type ArchitectureStyle =
 export type DatabaseOption = 'postgresql' | 'mysql' | 'mongodb' | 'sqlite' | 'none';
 export type AuthOption = 'jwt' | 'oauth' | 'session' | 'none';
 export type ToolingOption = 'docker' | 'ci' | 'tests' | 'linting' | 'husky';
-export type PackageManager = 'npm' | 'yarn' | 'pnpm' | 'gradle' | 'dotnet';
+export type PackageManager =
+  | 'npm'
+  | 'yarn'
+  | 'pnpm'
+  | 'gradle'
+  | 'dotnet'
+  | 'pip'
+  | 'composer'
+  | 'pub';
 export type ApiStyle = 'rest' | 'graphql' | 'grpc' | 'none';
 export type CSSFramework = 'tailwind' | 'css-modules' | 'styled-components' | 'sass' | 'none';
-export type StateManagement = 'zustand' | 'redux' | 'jotai' | 'context' | 'none';
-export type ORMChoice = 'prisma' | 'typeorm' | 'hibernate' | 'ef-core' | 'none';
+export type StateManagement =
+  | 'zustand'
+  | 'redux'
+  | 'jotai'
+  | 'context'
+  | 'ngrx'
+  | 'pinia'
+  | 'riverpod'
+  | 'none';
+export type ORMChoice =
+  | 'prisma'
+  | 'typeorm'
+  | 'hibernate'
+  | 'ef-core'
+  | 'django-orm'
+  | 'eloquent'
+  | 'none';
 export type LoggingFramework = 'slf4j' | 'serilog' | 'winston' | 'none';
 export type ValidationLibrary =
   | 'zod'
@@ -31,6 +65,25 @@ export type ValidationLibrary =
   | 'bean-validation'
   | 'fluent-validation'
   | 'none';
+
+/** Category of a stack */
+export type StackCategory = 'backend' | 'frontend' | 'mobile';
+
+/** Helper to determine a stack's category */
+export function getStackCategory(stack: Stack): StackCategory {
+  switch (stack) {
+    case 'react':
+    case 'nextjs':
+    case 'angular':
+    case 'vue':
+      return 'frontend';
+    case 'react-native':
+    case 'flutter':
+      return 'mobile';
+    default:
+      return 'backend';
+  }
+}
 
 export interface ProjectConfig {
   projectName: string;

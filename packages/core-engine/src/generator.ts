@@ -6,7 +6,13 @@
 import * as path from 'path';
 import * as fs from 'fs-extra';
 import chalk from 'chalk';
-import { ProjectConfig, GenerationResult, TemplateFile, TemplateManifest } from './types';
+import {
+  ProjectConfig,
+  GenerationResult,
+  TemplateFile,
+  TemplateManifest,
+  getStackCategory,
+} from './types';
 import { renderAllTemplates } from './template-engine';
 import { getTemplateManifest } from './template-registry';
 
@@ -53,13 +59,14 @@ export async function generateProject(config: ProjectConfig): Promise<Generation
       templates.push(...getTestTemplates(config));
     }
 
-    // Add CSS framework scaffolding (React only)
-    if (config.stack === 'react' && config.cssFramework && config.cssFramework !== 'none') {
+    // Add CSS framework scaffolding (frontend stacks)
+    const cat = getStackCategory(config.stack);
+    if (cat === 'frontend' && config.cssFramework && config.cssFramework !== 'none') {
       templates.push(...getCSSFrameworkTemplates(config));
     }
 
-    // Add state management setup (React only)
-    if (config.stack === 'react' && config.stateManagement && config.stateManagement !== 'none') {
+    // Add state management setup (frontend stacks)
+    if (cat === 'frontend' && config.stateManagement && config.stateManagement !== 'none') {
       templates.push(...getStateManagementTemplates(config));
     }
 
@@ -140,6 +147,123 @@ EXPOSE 8080
 ENTRYPOINT ["dotnet", "<%= projectName %>.dll"]
 `,
     });
+  } else if (config.stack === 'nodejs') {
+    templates.push({
+      path: 'Dockerfile',
+      content: `# ── ArchForge: Node.js Dockerfile ──
+FROM node:20-alpine AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+FROM node:20-alpine
+WORKDIR /app
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /app/package.json ./
+EXPOSE <%= port %>
+CMD ["node", "dist/index.js"]
+`,
+    });
+  } else if (config.stack === 'django') {
+    templates.push({
+      path: 'Dockerfile',
+      content: `# ── ArchForge: Django Dockerfile ──
+FROM python:3.13-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
+EXPOSE <%= port %>
+CMD ["gunicorn", "<%= projectName %>.wsgi:application", "--bind", "0.0.0.0:<%= port %>"]
+`,
+    });
+  } else if (config.stack === 'laravel') {
+    templates.push({
+      path: 'Dockerfile',
+      content: `# ── ArchForge: Laravel Dockerfile ──
+FROM php:8.3-fpm
+RUN apt-get update && apt-get install -y libpq-dev && \\
+    docker-php-ext-install pdo pdo_pgsql
+WORKDIR /var/www
+COPY . .
+RUN curl -sS https://getcomposer.org/installer | php && \\
+    php composer.phar install --no-dev --optimize-autoloader
+EXPOSE <%= port %>
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=<%= port %>"]
+`,
+    });
+  } else if (config.stack === 'nextjs') {
+    templates.push({
+      path: 'Dockerfile',
+      content: `# ── ArchForge: Next.js Dockerfile ──
+FROM node:20-alpine AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+FROM node:20-alpine
+WORKDIR /app
+COPY --from=build /app/.next ./.next
+COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /app/package.json ./
+EXPOSE <%= port %>
+CMD ["npm", "start"]
+`,
+    });
+  } else if (config.stack === 'angular') {
+    templates.push({
+      path: 'Dockerfile',
+      content: `# ── ArchForge: Angular Dockerfile ──
+FROM node:20-alpine AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+FROM nginx:alpine
+COPY --from=build /app/dist/<%= projectName %>/browser /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+`,
+    });
+  } else if (config.stack === 'vue') {
+    templates.push({
+      path: 'Dockerfile',
+      content: `# ── ArchForge: Vue.js Dockerfile ──
+FROM node:20-alpine AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+FROM nginx:alpine
+COPY --from=build /app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+`,
+    });
+  } else if (config.stack === 'flutter') {
+    templates.push({
+      path: 'Dockerfile',
+      content: `# ── ArchForge: Flutter Web Dockerfile ──
+FROM ghcr.io/cirruslabs/flutter:latest AS build
+WORKDIR /app
+COPY . .
+RUN flutter pub get && flutter build web
+
+FROM nginx:alpine
+COPY --from=build /app/build/web /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+`,
+    });
   }
 
   templates.push({
@@ -173,7 +297,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-<% if (stack === 'react') { %>
+<% if (stack === 'react' || stack === 'nextjs' || stack === 'angular' || stack === 'vue') { %>
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -181,6 +305,15 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm run test -- --coverage
+      - run: npm run build
+<% } else if (stack === 'nodejs') { %>
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
       - run: npm run build
 <% } else if (stack === 'java') { %>
       - uses: actions/setup-java@v4
@@ -196,6 +329,32 @@ jobs:
       - run: dotnet restore
       - run: dotnet build --no-restore
       - run: dotnet test --no-build
+<% } else if (stack === 'django') { %>
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: pip install -r requirements.txt
+      - run: python manage.py test
+<% } else if (stack === 'laravel') { %>
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+      - run: composer install --no-progress --prefer-dist
+      - run: php artisan test
+<% } else if (stack === 'react-native') { %>
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm test
+<% } else if (stack === 'flutter') { %>
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.32.0'
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter test
 <% } %>
 `,
     },
@@ -203,7 +362,7 @@ jobs:
 }
 
 function getTestTemplates(config: ProjectConfig): TemplateFile[] {
-  if (config.stack === 'react') {
+  if (config.stack === 'react' || config.stack === 'nextjs' || config.stack === 'vue') {
     return [
       {
         path: 'src/__tests__/App.test.tsx',
@@ -230,6 +389,97 @@ export default defineConfig({
     },
   },
 });
+`,
+      },
+    ];
+  }
+
+  if (config.stack === 'nodejs') {
+    return [
+      {
+        path: 'src/__tests__/health.test.ts',
+        content: `import { describe, it, expect } from 'vitest';
+
+describe('Health', () => {
+  it('should pass a basic test', () => {
+    expect(true).toBe(true);
+  });
+});
+`,
+      },
+    ];
+  }
+
+  if (config.stack === 'django') {
+    return [
+      {
+        path: 'tests/__init__.py',
+        content: '',
+      },
+      {
+        path: 'tests/test_health.py',
+        content: `from django.test import TestCase, Client
+
+class HealthCheckTestCase(TestCase):
+    def test_health_endpoint(self):
+        client = Client()
+        response = client.get('/api/health/')
+        self.assertEqual(response.status_code, 200)
+`,
+      },
+    ];
+  }
+
+  if (config.stack === 'laravel') {
+    return [
+      {
+        path: 'tests/Feature/HealthTest.php',
+        content: `<?php
+
+namespace Tests\\Feature;
+
+use Tests\\TestCase;
+
+class HealthTest extends TestCase
+{
+    public function test_health_endpoint(): void
+    {
+        $response = $this->get('/api/health');
+        $response->assertStatus(200);
+    }
+}
+`,
+      },
+    ];
+  }
+
+  if (config.stack === 'react-native') {
+    return [
+      {
+        path: '__tests__/App.test.tsx',
+        content: `import { describe, it, expect } from '@jest/globals';
+
+describe('App', () => {
+  it('should pass a basic test', () => {
+    expect(true).toBe(true);
+  });
+});
+`,
+      },
+    ];
+  }
+
+  if (config.stack === 'flutter') {
+    return [
+      {
+        path: 'test/widget_test.dart',
+        content: `import 'package:flutter_test/flutter_test.dart';
+
+void main() {
+  test('basic test', () {
+    expect(1 + 1, 2);
+  });
+}
 `,
       },
     ];
@@ -438,6 +688,53 @@ export const countAtom = atom(0);
 export const doubleCountAtom = atom((get) => get(countAtom) * 2);
 `,
     });
+  } else if (config.stateManagement === 'pinia') {
+    templates.push({
+      path: 'src/stores/counter.ts',
+      content: `import { defineStore } from 'pinia';
+import { ref, computed } from 'vue';
+
+export const useCounterStore = defineStore('counter', () => {
+  const count = ref(0);
+  const doubleCount = computed(() => count.value * 2);
+
+  function increment() { count.value++; }
+  function decrement() { count.value--; }
+  function reset() { count.value = 0; }
+
+  return { count, doubleCount, increment, decrement, reset };
+});
+`,
+    });
+  } else if (config.stateManagement === 'ngrx') {
+    templates.push(
+      {
+        path: 'src/app/store/counter.actions.ts',
+        content: `import { createAction } from '@ngrx/store';
+
+export const increment = createAction('[Counter] Increment');
+export const decrement = createAction('[Counter] Decrement');
+export const reset = createAction('[Counter] Reset');
+`,
+      },
+      {
+        path: 'src/app/store/counter.reducer.ts',
+        content: `import { createReducer, on } from '@ngrx/store';
+import { increment, decrement, reset } from './counter.actions';
+
+export interface CounterState { count: number; }
+
+const initialState: CounterState = { count: 0 };
+
+export const counterReducer = createReducer(
+  initialState,
+  on(increment, (state) => ({ count: state.count + 1 })),
+  on(decrement, (state) => ({ count: state.count - 1 })),
+  on(reset, () => initialState),
+);
+`,
+      },
+    );
   }
 
   return templates;

@@ -45,7 +45,7 @@ export const ARCHITECTURE_DEFINITIONS: Record<string, ArchitectureDefinition> = 
       presentation: ['controllers', 'middleware'],
     },
     rules: [],
-    supportedStacks: ['react', 'java', 'dotnet'],
+    supportedStacks: ['react', 'java', 'dotnet', 'nodejs', 'django', 'react-native'],
   },
 
   layered: {
@@ -70,7 +70,16 @@ export const ARCHITECTURE_DEFINITIONS: Record<string, ArchitectureDefinition> = 
       controllers: ['UserController'],
     },
     rules: [],
-    supportedStacks: ['react', 'java', 'dotnet'],
+    supportedStacks: [
+      'react',
+      'java',
+      'dotnet',
+      'nodejs',
+      'django',
+      'laravel',
+      'angular',
+      'flutter',
+    ],
   },
 
   'feature-based': {
@@ -93,7 +102,7 @@ export const ARCHITECTURE_DEFINITIONS: Record<string, ArchitectureDefinition> = 
       app: ['App', 'providers'],
     },
     rules: [],
-    supportedStacks: ['react'],
+    supportedStacks: ['react', 'nextjs', 'angular', 'vue', 'react-native'],
   },
 
   hexagonal: {
@@ -127,7 +136,7 @@ export const ARCHITECTURE_DEFINITIONS: Record<string, ArchitectureDefinition> = 
       adapters: ['inbound/rest', 'outbound/persistence', 'outbound/messaging'],
     },
     rules: [],
-    supportedStacks: ['java', 'dotnet'],
+    supportedStacks: ['java', 'dotnet', 'nodejs'],
   },
 
   ddd: {
@@ -223,7 +232,7 @@ export const ARCHITECTURE_DEFINITIONS: Record<string, ArchitectureDefinition> = 
       app: ['providers', 'styles'],
     },
     rules: [],
-    supportedStacks: ['react'],
+    supportedStacks: ['react', 'nextjs'],
   },
 
   mvc: {
@@ -248,7 +257,7 @@ export const ARCHITECTURE_DEFINITIONS: Record<string, ArchitectureDefinition> = 
       views: ['templates'],
     },
     rules: [],
-    supportedStacks: ['java', 'dotnet'],
+    supportedStacks: ['java', 'dotnet', 'nodejs', 'django', 'laravel'],
   },
 
   cqrs: {
@@ -344,7 +353,7 @@ export const ARCHITECTURE_DEFINITIONS: Record<string, ArchitectureDefinition> = 
       host: ['startup', 'config'],
     },
     rules: [],
-    supportedStacks: ['java', 'dotnet'],
+    supportedStacks: ['java', 'dotnet', 'nodejs', 'laravel'],
   },
 };
 

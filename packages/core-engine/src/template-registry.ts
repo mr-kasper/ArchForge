@@ -16,45 +16,92 @@ import {
   javaModularMonolithManifest,
   dotnetModularMonolithManifest,
 } from './templates/modular-monolith';
+import {
+  nodejsCleanManifest,
+  nodejsLayeredManifest,
+  nodejsMVCManifest,
+  nodejsModularMonolithManifest,
+  nodejsHexagonalManifest,
+} from './templates/nodejs';
+import { djangoLayeredManifest, djangoMVCManifest, djangoCleanManifest } from './templates/django';
+import {
+  laravelMVCManifest,
+  laravelLayeredManifest,
+  laravelModularMonolithManifest,
+} from './templates/laravel';
+import { nextjsFeatureBasedManifest, nextjsFeatureSlicedManifest } from './templates/nextjs';
+import { angularFeatureBasedManifest, angularLayeredManifest } from './templates/angular';
+import { vueFeatureBasedManifest } from './templates/vue';
+import {
+  reactNativeFeatureBasedManifest,
+  reactNativeCleanManifest,
+} from './templates/react-native';
+import { flutterCleanManifest, flutterLayeredManifest } from './templates/flutter';
 
 type RegistryKey = `${Stack}:${ArchitectureStyle}`;
 
 const registry: Record<string, TemplateManifest> = {
-  // ── Original templates ──────────────────────────────
+  // ── React ───────────────────────────────────────────
   'react:clean': reactCleanManifest,
   'react:feature-based': reactFeatureManifest,
   'react:layered': reactLayeredManifest,
-  'java:clean': javaCleanManifest,
-  'java:layered': javaLayeredManifest,
-  'dotnet:clean': dotnetCleanManifest,
-  'dotnet:layered': dotnetLayeredManifest,
-
-  // ── Hexagonal (Ports & Adapters) ────────────────────
-  'java:hexagonal': javaHexagonalManifest,
-  'dotnet:hexagonal': dotnetHexagonalManifest,
-
-  // ── Domain-Driven Design ────────────────────────────
-  'java:ddd': javaDDDManifest,
-  'dotnet:ddd': dotnetDDDManifest,
-
-  // ── Feature-Sliced Design ───────────────────────────
   'react:feature-sliced': reactFeatureSlicedManifest,
 
-  // ── MVC ─────────────────────────────────────────────
+  // ── Java (Spring Boot) ──────────────────────────────
+  'java:clean': javaCleanManifest,
+  'java:layered': javaLayeredManifest,
+  'java:hexagonal': javaHexagonalManifest,
+  'java:ddd': javaDDDManifest,
   'java:mvc': javaMVCManifest,
-  'dotnet:mvc': dotnetMVCManifest,
-
-  // ── CQRS ────────────────────────────────────────────
   'java:cqrs': javaCQRSManifest,
-  'dotnet:cqrs': dotnetCQRSManifest,
-
-  // ── Microservices ───────────────────────────────────
   'java:microservices': javaMicroservicesManifest,
-  'dotnet:microservices': dotnetMicroservicesManifest,
-
-  // ── Modular Monolith ────────────────────────────────
   'java:modular-monolith': javaModularMonolithManifest,
+
+  // ── .NET (ASP.NET Core) ─────────────────────────────
+  'dotnet:clean': dotnetCleanManifest,
+  'dotnet:layered': dotnetLayeredManifest,
+  'dotnet:hexagonal': dotnetHexagonalManifest,
+  'dotnet:ddd': dotnetDDDManifest,
+  'dotnet:mvc': dotnetMVCManifest,
+  'dotnet:cqrs': dotnetCQRSManifest,
+  'dotnet:microservices': dotnetMicroservicesManifest,
   'dotnet:modular-monolith': dotnetModularMonolithManifest,
+
+  // ── Node.js (Express) ──────────────────────────────
+  'nodejs:clean': nodejsCleanManifest,
+  'nodejs:layered': nodejsLayeredManifest,
+  'nodejs:mvc': nodejsMVCManifest,
+  'nodejs:modular-monolith': nodejsModularMonolithManifest,
+  'nodejs:hexagonal': nodejsHexagonalManifest,
+
+  // ── Django (Python) ─────────────────────────────────
+  'django:layered': djangoLayeredManifest,
+  'django:mvc': djangoMVCManifest,
+  'django:clean': djangoCleanManifest,
+
+  // ── Laravel (PHP) ───────────────────────────────────
+  'laravel:mvc': laravelMVCManifest,
+  'laravel:layered': laravelLayeredManifest,
+  'laravel:modular-monolith': laravelModularMonolithManifest,
+
+  // ── Next.js ─────────────────────────────────────────
+  'nextjs:feature-based': nextjsFeatureBasedManifest,
+  'nextjs:feature-sliced': nextjsFeatureSlicedManifest,
+
+  // ── Angular ─────────────────────────────────────────
+  'angular:feature-based': angularFeatureBasedManifest,
+  'angular:layered': angularLayeredManifest,
+
+  // ── Vue.js ──────────────────────────────────────────
+  'vue:feature-based': vueFeatureBasedManifest,
+
+  // ── React Native ────────────────────────────────────
+  'react-native:feature-based': reactNativeFeatureBasedManifest,
+  'react-native:clean': reactNativeCleanManifest,
+
+  // ── Flutter ─────────────────────────────────────────
+  'flutter:clean': flutterCleanManifest,
+  'flutter:layered': flutterLayeredManifest,
 };
 
 /**

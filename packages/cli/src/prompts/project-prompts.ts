@@ -19,6 +19,7 @@ import {
   LoggingFramework,
   ValidationLibrary,
   ProjectConfig,
+  getStackCategory,
 } from '@archforge/core-engine';
 import * as path from 'path';
 
@@ -76,9 +77,20 @@ export async function collectProjectConfig(
       message: 'Technology stack:',
       when: () => !overrides.stack,
       choices: [
+        separator('Frontend'),
         { name: '⚛️  React          (TypeScript + Vite)', value: 'react' },
+        { name: '▲  Next.js        (React + App Router + SSR)', value: 'nextjs' },
+        { name: '🅰️  Angular        (TypeScript + Standalone Components)', value: 'angular' },
+        { name: '💚 Vue.js         (Composition API + Vite)', value: 'vue' },
+        separator('Backend'),
+        { name: '🟢 Node.js        (Express + TypeScript)', value: 'nodejs' },
         { name: '☕ Java           (Spring Boot + Gradle)', value: 'java' },
         { name: '🔷 .NET           (ASP.NET Core 8 + C#)', value: 'dotnet' },
+        { name: '🐍 Django         (Python + Django REST Framework)', value: 'django' },
+        { name: '🐘 Laravel        (PHP 8.3 + Eloquent)', value: 'laravel' },
+        separator('Mobile'),
+        { name: '📱 React Native   (Expo + TypeScript)', value: 'react-native' },
+        { name: '🦋 Flutter        (Dart + Riverpod)', value: 'flutter' },
       ],
     },
   ]);
@@ -117,6 +129,128 @@ export async function collectProjectConfig(
             {
               name: '🍰 Feature-Sliced       (app / pages / features / entities / shared)',
               value: 'feature-sliced',
+            },
+          ];
+        }
+
+        if (stack === 'nextjs') {
+          return [
+            {
+              name: '📦 Feature-based        (features/ with components, hooks, actions)',
+              value: 'feature-based',
+            },
+            {
+              name: '🍰 Feature-Sliced       (shared → entities → features → widgets → app)',
+              value: 'feature-sliced',
+            },
+          ];
+        }
+
+        if (stack === 'angular') {
+          return [
+            {
+              name: '📦 Feature-based        (feature modules with services & pages)',
+              value: 'feature-based',
+            },
+            {
+              name: '📚 Layered              (Presentation → Services → Data → Domain)',
+              value: 'layered',
+            },
+          ];
+        }
+
+        if (stack === 'vue') {
+          return [
+            {
+              name: '📦 Feature-based        (features/ with pages, composables, components)',
+              value: 'feature-based',
+            },
+          ];
+        }
+
+        if (stack === 'nodejs') {
+          return [
+            separator('Recommended'),
+            {
+              name: '🏛️  Clean Architecture   (Domain → Application → Infrastructure → Presentation)',
+              value: 'clean',
+            },
+            {
+              name: '📚 Layered              (Controller → Service → Repository → Model)',
+              value: 'layered',
+            },
+            {
+              name: '🎯 MVC                  (Model-View-Controller + REST API)',
+              value: 'mvc',
+            },
+            {
+              name: '🧱 Modular Monolith     (isolated modules with public APIs)',
+              value: 'modular-monolith',
+            },
+            separator('Advanced'),
+            {
+              name: '🔷 Hexagonal            (Ports & Adapters)',
+              value: 'hexagonal',
+            },
+          ];
+        }
+
+        if (stack === 'django') {
+          return [
+            {
+              name: '📚 Layered              (Views → Services → Repositories → Models)',
+              value: 'layered',
+            },
+            {
+              name: '🎯 MVC                  (Django MTV — Models → Templates → Views)',
+              value: 'mvc',
+            },
+            {
+              name: '🏛️  Clean Architecture   (Domain entities + repository interfaces)',
+              value: 'clean',
+            },
+          ];
+        }
+
+        if (stack === 'laravel') {
+          return [
+            {
+              name: '🎯 MVC                  (Models → Controllers + Routes)',
+              value: 'mvc',
+            },
+            {
+              name: '📚 Layered              (Controllers → Services → Repositories → Models)',
+              value: 'layered',
+            },
+            {
+              name: '🧱 Modular Monolith     (isolated modules with service providers)',
+              value: 'modular-monolith',
+            },
+          ];
+        }
+
+        if (stack === 'react-native') {
+          return [
+            {
+              name: '📦 Feature-based        (features/ with hooks, api, components)',
+              value: 'feature-based',
+            },
+            {
+              name: '🏛️  Clean Architecture   (Domain → Data → Presentation)',
+              value: 'clean',
+            },
+          ];
+        }
+
+        if (stack === 'flutter') {
+          return [
+            {
+              name: '🏛️  Clean Architecture   (Domain → Data → Presentation)',
+              value: 'clean',
+            },
+            {
+              name: '📚 Layered              (UI → Providers → Services → Models)',
+              value: 'layered',
             },
           ];
         }
@@ -169,7 +303,9 @@ export async function collectProjectConfig(
   // ────────────────────────────────────────────────────
   heading('Data & API');
 
-  const isBackend = stack === 'java' || stack === 'dotnet';
+  const category = getStackCategory(stack);
+  const isBackend = category === 'backend';
+  const isFrontend = category === 'frontend';
 
   const dataSection = await inquirer.prompt([
     // Database — always show, but choices vary by stack
@@ -179,7 +315,7 @@ export async function collectProjectConfig(
       message: 'Database:',
       when: () => !overrides.database,
       choices: () => {
-        if (stack === 'react') {
+        if (isFrontend || category === 'mobile') {
           return [
             { name: '❌ None              (frontend only — calls external API)', value: 'none' },
             { name: '🍃 MongoDB           (via API layer)', value: 'mongodb' },
@@ -217,6 +353,25 @@ export async function collectProjectConfig(
             { name: '❌ None              (raw ADO.NET / Dapper)', value: 'none' },
           ];
         }
+        if (stack === 'nodejs') {
+          return [
+            { name: '🟢 Prisma            (type-safe ORM)', value: 'prisma' },
+            { name: '🔷 TypeORM           (decorator-based ORM)', value: 'typeorm' },
+            { name: '❌ None              (raw queries)', value: 'none' },
+          ];
+        }
+        if (stack === 'django') {
+          return [
+            { name: '🐍 Django ORM        (built-in, batteries-included)', value: 'django-orm' },
+            { name: '❌ None              (raw SQL)', value: 'none' },
+          ];
+        }
+        if (stack === 'laravel') {
+          return [
+            { name: '🐘 Eloquent          (built-in Active Record ORM)', value: 'eloquent' },
+            { name: '❌ None              (raw DB facade)', value: 'none' },
+          ];
+        }
         return [{ name: '❌ None', value: 'none' }];
       },
     },
@@ -238,7 +393,7 @@ export async function collectProjectConfig(
   // Section 4: Frontend Options (React only)
   // ────────────────────────────────────────────────────
   let frontendSection: Record<string, string> = {};
-  if (stack === 'react') {
+  if (isFrontend) {
     heading('Frontend Options');
 
     frontendSection = await inquirer.prompt([
@@ -258,13 +413,28 @@ export async function collectProjectConfig(
         type: 'list',
         name: 'stateManagement',
         message: 'State management:',
-        choices: [
-          { name: '🐻 Zustand           (lightweight, hooks-based)', value: 'zustand' },
-          { name: '🏪 Redux Toolkit     (feature-rich, widely adopted)', value: 'redux' },
-          { name: '⚛️  Jotai             (atomic, minimal boilerplate)', value: 'jotai' },
-          { name: '📦 React Context     (built-in, no extra deps)', value: 'context' },
-          { name: '❌ None              (prop drilling / server state only)', value: 'none' },
-        ],
+        choices: () => {
+          if (stack === 'angular') {
+            return [
+              { name: '🟣 NgRx              (Redux-inspired for Angular)', value: 'ngrx' },
+              { name: '📦 Services only     (Angular DI, no extra deps)', value: 'none' },
+            ];
+          }
+          if (stack === 'vue') {
+            return [
+              { name: '🍍 Pinia             (official Vue store)', value: 'pinia' },
+              { name: '❌ None              (composables only)', value: 'none' },
+            ];
+          }
+          // React & Next.js
+          return [
+            { name: '🐻 Zustand           (lightweight, hooks-based)', value: 'zustand' },
+            { name: '🏪 Redux Toolkit     (feature-rich, widely adopted)', value: 'redux' },
+            { name: '⚛️  Jotai             (atomic, minimal boilerplate)', value: 'jotai' },
+            { name: '📦 React Context     (built-in, no extra deps)', value: 'context' },
+            { name: '❌ None              (prop drilling / server state only)', value: 'none' },
+          ];
+        },
       },
     ]);
   }
@@ -294,7 +464,21 @@ export async function collectProjectConfig(
       name: 'validation',
       message: 'Validation library:',
       choices: () => {
-        if (stack === 'react') {
+        if (
+          stack === 'react' ||
+          stack === 'nextjs' ||
+          stack === 'vue' ||
+          stack === 'react-native'
+        ) {
+          return [
+            { name: '🛡️  Zod               (TypeScript-first schema validation)', value: 'zod' },
+            { name: '❌ None', value: 'none' },
+          ];
+        }
+        if (stack === 'angular') {
+          return [{ name: '🅰️  Angular Forms      (built-in reactive validation)', value: 'none' }];
+        }
+        if (stack === 'nodejs') {
           return [
             { name: '🛡️  Zod               (TypeScript-first schema validation)', value: 'zod' },
             { name: '❌ None', value: 'none' },
@@ -315,6 +499,19 @@ export async function collectProjectConfig(
             { name: '❌ None', value: 'none' },
           ];
         }
+        if (stack === 'django') {
+          return [
+            { name: '🐍 DRF Serializers   (built-in Django REST validation)', value: 'none' },
+          ];
+        }
+        if (stack === 'laravel') {
+          return [{ name: '🐘 Laravel Validation (built-in request validation)', value: 'none' }];
+        }
+        if (stack === 'flutter') {
+          return [
+            { name: '🦋 Built-in          (Dart type system + form validators)', value: 'none' },
+          ];
+        }
         return [{ name: '❌ None', value: 'none' }];
       },
     },
@@ -331,11 +528,24 @@ export async function collectProjectConfig(
       name: 'packageManager',
       message: 'Package manager:',
       choices: () => {
-        if (stack === 'react') {
+        if (
+          stack === 'react' ||
+          stack === 'nextjs' ||
+          stack === 'vue' ||
+          stack === 'nodejs' ||
+          stack === 'react-native'
+        ) {
           return [
             { name: '📦 npm               (default, widely supported)', value: 'npm' },
             { name: '🧶 Yarn              (faster installs, workspaces)', value: 'yarn' },
             { name: '⚡ pnpm              (disk-efficient, strict)', value: 'pnpm' },
+          ];
+        }
+        if (stack === 'angular') {
+          return [
+            { name: '📦 npm               (Angular CLI default)', value: 'npm' },
+            { name: '🧶 Yarn              (faster installs)', value: 'yarn' },
+            { name: '⚡ pnpm              (disk-efficient)', value: 'pnpm' },
           ];
         }
         if (stack === 'java') {
@@ -343,6 +553,15 @@ export async function collectProjectConfig(
         }
         if (stack === 'dotnet') {
           return [{ name: '🔷 dotnet CLI        (default for .NET)', value: 'dotnet' }];
+        }
+        if (stack === 'django') {
+          return [{ name: '🐍 pip / venv        (Python default)', value: 'pip' }];
+        }
+        if (stack === 'laravel') {
+          return [{ name: '🐘 Composer          (PHP default)', value: 'composer' }];
+        }
+        if (stack === 'flutter') {
+          return [{ name: '🦋 pub               (Dart default)', value: 'pub' }];
         }
         return [{ name: '📦 npm', value: 'npm' }];
       },
@@ -365,6 +584,19 @@ export async function collectProjectConfig(
             { name: '❌ None              (built-in ILogger only)', value: 'none' },
           ];
         }
+        if (stack === 'nodejs') {
+          return [
+            { name: '📝 Pino              (fast JSON logging)', value: 'pino' },
+            { name: '📝 Winston           (versatile transport-based)', value: 'winston' },
+            { name: '❌ None              (console only)', value: 'none' },
+          ];
+        }
+        if (stack === 'django') {
+          return [{ name: '📝 Python logging    (built-in stdlib)', value: 'none' }];
+        }
+        if (stack === 'laravel') {
+          return [{ name: '📝 Monolog           (Laravel default)', value: 'none' }];
+        }
         return [{ name: '❌ None', value: 'none' }];
       },
     },
@@ -386,7 +618,7 @@ export async function collectProjectConfig(
             checked: true,
           },
         ];
-        if (stack === 'react') {
+        if (isFrontend || stack === 'nodejs' || stack === 'react-native') {
           base.push(
             {
               name: '🔍 ESLint + Prettier (code quality & formatting)',
@@ -403,8 +635,11 @@ export async function collectProjectConfig(
       type: 'input',
       name: 'port',
       message: 'Server port:',
-      when: () => isBackend,
-      default: '8080',
+      when: () => category !== 'mobile',
+      default: () => {
+        if (isBackend) return '8080';
+        return '3000';
+      },
       validate: (input: string) => {
         const n = parseInt(input, 10);
         if (isNaN(n) || n < 1 || n > 65535) return 'Must be a valid port (1–65535)';
