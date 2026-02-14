@@ -1,6 +1,6 @@
 {
   "name": "@archforge/cli",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "ArchForge CLI — interactive project architecture generator",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -38,7 +38,7 @@
     "test": "jest --passWithNoTests"
   },
   "dependencies": {
-    "@archforge/core-engine": "1.1.0",
+    "@archforge/core-engine": "1.2.0",
     "commander": "^12.0.0",
     "inquirer": "^8.2.6",
     "chalk": "^4.1.2",

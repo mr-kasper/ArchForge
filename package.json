@@ -1,6 +1,6 @@
 {
   "name": "archforge",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Universal Architecture Generator — stack-agnostic CLI that generates standardized, production-ready project architectures",
   "private": true,
   "workspaces": [
